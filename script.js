@@ -319,29 +319,38 @@ function updateWebsiteMetrics() {
     ];
     
     websites.forEach(website => {
-        const responseElement = document.getElementById(`response${website.id}`);
-        const visitorsElement = document.getElementById(`visitors${website.id}`);
         const cpuElement = document.getElementById(`websiteCpu${website.id}`);
         const memElement = document.getElementById(`websiteMem${website.id}`);
-        
+
+        if (website.id === 2) {
+            if (cpuElement && memElement) {
+                const mailLoad = Math.max(8, Math.min(45, 20 + (Math.random() - 0.5) * 12));
+                const diskUse = Math.max(72, Math.min(92, 80 + (Math.random() - 0.5) * 8));
+                cpuElement.style.width = mailLoad + '%';
+                memElement.style.width = diskUse + '%';
+            }
+            return;
+        }
+
+        const responseElement = document.getElementById(`response${website.id}`);
+        const visitorsElement = document.getElementById(`visitors${website.id}`);
+
         if (responseElement && visitorsElement && cpuElement && memElement) {
-            // Update response time
             const responseVariation = (Math.random() - 0.5) * 50;
             const newResponse = Math.max(100, website.baseResponse + responseVariation);
             responseElement.textContent = Math.round(newResponse) + 'ms';
-            
-            // Update visitors (gradually increasing)
+
             const visitorIncrease = Math.floor(Math.random() * 5);
-            const currentVisitors = parseInt(visitorsElement.textContent.replace(',', ''));
+            const currentVisitors = parseInt(visitorsElement.textContent.replace(/,/g, ''), 10) || 0;
             visitorsElement.textContent = (currentVisitors + visitorIncrease).toLocaleString();
-            
-            // Update resource usage
+
             const cpuVariation = (Math.random() - 0.5) * 15;
             const memVariation = (Math.random() - 0.5) * 10;
-            
-            const newCpu = Math.max(0, Math.min(100, 35 + cpuVariation));
-            const newMem = Math.max(0, Math.min(100, 58 + memVariation));
-            
+            const baseCpu = website.id === 3 ? 78 : 35;
+            const baseMem = website.id === 3 ? 89 : 58;
+            const newCpu = Math.max(0, Math.min(100, baseCpu + cpuVariation));
+            const newMem = Math.max(0, Math.min(100, baseMem + memVariation));
+
             cpuElement.style.width = newCpu + '%';
             memElement.style.width = newMem + '%';
         }
@@ -444,24 +453,35 @@ function startServer(serverId) {
 // Website control functions
 function toggleWebsite(websiteId) {
     const websiteCard = document.getElementById(`website${websiteId}`);
+    if (!websiteCard) return;
     const statusElement = websiteCard.querySelector('.website-status');
-    
-    if (statusElement.textContent === 'Online') {
-        statusElement.textContent = 'Offline';
-        statusElement.className = 'website-status offline';
-        addActivityToFeed(`Website ${websiteId} taken offline`, 'warning');
+    if (!statusElement) return;
+
+    const label = statusElement.textContent.trim();
+    const isOnline = label.includes('Online');
+
+    if (isOnline) {
+        statusElement.textContent = '● Offline';
+        statusElement.className = 'status-badge offline website-status';
+        addActivityToFeed(`Host ${websiteId} taken offline`, 'warning');
     } else {
-        statusElement.textContent = 'Online';
-        statusElement.className = 'website-status online';
-        addActivityToFeed(`Website ${websiteId} brought online`, 'success');
+        statusElement.textContent = '● Online';
+        statusElement.className = 'status-badge online website-status';
+        addActivityToFeed(`Host ${websiteId} brought online`, 'success');
     }
 }
 
 function viewWebsite(websiteId) {
-    const websites = ['www.cybercothtechnetworks.co.zw', 'cctn-dashboard.co.zw', 'cctn-apps.co.zw'];
-    const url = `https://${websites[websiteId - 1]}`;
-    window.open(url, '_blank');
-    addActivityToFeed(`Opened ${websites[websiteId - 1]} in new tab`, 'info');
+    const websites = [
+        'https://www.cybercothtechnetworks.co.zw',
+        'https://mail.cctn-server.co.zw',
+        'https://cctn-apps.co.zw'
+    ];
+    const url = websites[websiteId - 1];
+    if (!url) return;
+    const w = window.open(url, '_blank');
+    if (w) w.opener = null;
+    addActivityToFeed(`Opened ${url.replace(/^https?:\/\//, '')} in new tab`, 'info');
 }
 
 // Chart update function

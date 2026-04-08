@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <title>CCTN Cloud Development Suite - AI-Powered Web Development & Hosting in Zimbabwe | Cyber Comptecth Networks</title>
-    <meta name="description" content="Leading AI-powered web development, cloud hosting, SEO optimization, and server management services in Zimbabwe. Professional website design, app development, and digital marketing solutions for businesses across Zimbabwe.">
-    <meta name="keywords" content="web development Zimbabwe, website design Zimbabwe, cloud hosting Zimbabwe, SEO services Zimbabwe, app development Zimbabwe, digital marketing Zimbabwe, server management Zimbabwe, AI web development, Cyber Comptecth Networks, CCTN, Harare web design, Bulawayo web development, Gweru web services, Mutare website design">
+    <meta name="description" content="Cyber Comptech Networks (CCTN) — Zimbabwe IT leader in AI-powered development, Zentyal mail hosting, VM server configuration, cloud hosting, SEO, and app development. Professional web services nationwide.">
+    <meta name="keywords" content="Zimbabwe IT, Zentyal hosting, CCTN, Cyber Comptech Networks, app development Zimbabwe, ZOL email setup, web development Zimbabwe, cloud hosting Zimbabwe, AI web development, Harare web design, server management Zimbabwe, VM hosting Zimbabwe">
     <meta name="author" content="Cyber Comptecth Networks">
     <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
     <meta name="googlebot" content="index, follow">
@@ -74,9 +74,8 @@
     <link rel="dns-prefetch" href="//fonts.googleapis.com">
     <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
     
-    <link rel="stylesheet" href="style.css?v=6">
+    <link rel="stylesheet" href="style.css?v=7">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- Structured Data for Local Business -->
     <script type="application/ld+json">
@@ -334,7 +333,8 @@
                     <a href="https://himmelstor.co.zw/" target="_blank" rel="noopener noreferrer" class="p-link">Visit himmelstor.co.zw <i class="fas fa-external-link-alt" aria-hidden="true"></i></a>
                 </div>
                 <div class="p-preview">
-                    <iframe src="https://himmelstor.co.zw/" title="Himmelstor preview" loading="lazy"></iframe>
+                    <iframe src="https://himmelstor.co.zw/" title="Himmelstor preview" loading="lazy" class="p-preview-iframe"></iframe>
+                    <a href="https://himmelstor.co.zw/" target="_blank" rel="noopener noreferrer" class="p-preview-mobile-link">Open himmelstor.co.zw</a>
                 </div>
             </div>
             <div class="portfolio-item glass-card">
@@ -344,7 +344,8 @@
                     <a href="https://havenbabywear.co.zw/" target="_blank" rel="noopener noreferrer" class="p-link">Visit havenbabywear.co.zw <i class="fas fa-external-link-alt" aria-hidden="true"></i></a>
                 </div>
                 <div class="p-preview">
-                    <iframe src="https://havenbabywear.co.zw/" title="Haven Baby Wear preview" loading="lazy"></iframe>
+                    <iframe src="https://havenbabywear.co.zw/" title="Haven Baby Wear preview" loading="lazy" class="p-preview-iframe"></iframe>
+                    <a href="https://havenbabywear.co.zw/" target="_blank" rel="noopener noreferrer" class="p-preview-mobile-link">Open havenbabywear.co.zw</a>
                 </div>
             </div>
         </div>
@@ -599,147 +600,94 @@
         </div>
     </section>
 
-    <!-- Live Website Management Section -->
-    <section id="website-management" class="website-management">
+    <!-- Live Website Management — Command Center -->
+    <section id="website-management" class="management-suite">
         <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Live Website Management</h2>
-                <p class="section-description">
-                    Real-time monitoring and control of your hosted websites
-                </p>
+            <div class="section-header management-suite-header">
+                <h2 class="section-title glow-text">Live Website Management</h2>
+                <p class="section-description">Real-time monitoring and control of your hosted infrastructure</p>
             </div>
-            <div class="website-grid">
-                <div class="website-card" id="website1">
-                    <div class="website-header">
-                        <div class="website-info">
+            <div class="mgmt-dashboard-grid">
+                <div class="mgmt-glass-card" id="website1">
+                    <div class="mgmt-card-top">
+                        <div class="mgmt-card-title-row">
                             <h3>www.cybercothtechnetworks.co.zw</h3>
-                            <span class="website-status online">Online</span>
+                            <span class="status-badge online website-status">● Online</span>
                         </div>
-                        <div class="website-actions">
-                            <button class="action-btn-tiny" onclick="toggleWebsite(1)">
-                                <i class="fas fa-power-off"></i>
-                            </button>
-                            <button class="action-btn-tiny" onclick="viewWebsite(1)">
-                                <i class="fas fa-external-link-alt"></i>
-                            </button>
+                        <div class="mgmt-card-actions">
+                            <button type="button" class="mgmt-icon-btn" onclick="toggleWebsite(1)" aria-label="Toggle site power"><i class="fas fa-power-off" aria-hidden="true"></i></button>
+                            <button type="button" class="mgmt-icon-btn" onclick="viewWebsite(1)" aria-label="Open site in new tab"><i class="fas fa-external-link-alt" aria-hidden="true"></i></button>
                         </div>
                     </div>
-                    <div class="website-metrics">
-                        <div class="metric">
-                            <span class="metric-label">Uptime</span>
-                            <span class="metric-value" id="uptime1">99.9%</span>
-                        </div>
-                        <div class="metric">
-                            <span class="metric-label">Response Time</span>
-                            <span class="metric-value" id="response1">245ms</span>
-                        </div>
-                        <div class="metric">
-                            <span class="metric-label">Visitors Today</span>
-                            <span class="metric-value" id="visitors1">1,247</span>
-                        </div>
+                    <div class="mgmt-stats-row">
+                        <div class="mgmt-stat-item"><span>Uptime</span><strong id="uptime1">99.9%</strong></div>
+                        <div class="mgmt-stat-item"><span>Response</span><strong id="response1">245ms</strong></div>
+                        <div class="mgmt-stat-item"><span>Visitors</span><strong id="visitors1">1,247</strong></div>
                     </div>
-                    <div class="website-progress">
-                        <div class="progress-item">
-                            <span>CPU Usage</span>
-                            <div class="progress-bar-small">
-                                <div class="progress-fill-small" id="websiteCpu1" style="width: 35%"></div>
-                            </div>
+                    <div class="mgmt-resource-bars">
+                        <div class="mgmt-bar-group">
+                            <label><i class="fas fa-microchip" aria-hidden="true"></i> CPU Usage</label>
+                            <div class="mgmt-progress"><div class="mgmt-fill" id="websiteCpu1" style="width:35%;"></div></div>
                         </div>
-                        <div class="progress-item">
-                            <span>Memory Usage</span>
-                            <div class="progress-bar-small">
-                                <div class="progress-fill-small" id="websiteMem1" style="width: 58%"></div>
-                            </div>
+                        <div class="mgmt-bar-group">
+                            <label><i class="fas fa-memory" aria-hidden="true"></i> VM Memory</label>
+                            <div class="mgmt-progress"><div class="mgmt-fill" id="websiteMem1" style="width:58%;"></div></div>
                         </div>
                     </div>
                 </div>
 
-                <div class="website-card" id="website2">
-                    <div class="website-header">
-                        <div class="website-info">
-                            <h3>cctn-dashboard.co.zw</h3>
-                            <span class="website-status online">Online</span>
+                <div class="mgmt-glass-card" id="website2">
+                    <div class="mgmt-card-top">
+                        <div class="mgmt-card-title-row">
+                            <h3>mail.cctn-server.co.zw</h3>
+                            <span class="status-badge online website-status">● Online</span>
                         </div>
-                        <div class="website-actions">
-                            <button class="action-btn-tiny" onclick="toggleWebsite(2)">
-                                <i class="fas fa-power-off"></i>
-                            </button>
-                            <button class="action-btn-tiny" onclick="viewWebsite(2)">
-                                <i class="fas fa-external-link-alt"></i>
-                            </button>
+                        <div class="mgmt-card-actions">
+                            <button type="button" class="mgmt-icon-btn" onclick="toggleWebsite(2)" aria-label="Toggle mail host"><i class="fas fa-power-off" aria-hidden="true"></i></button>
+                            <button type="button" class="mgmt-icon-btn" onclick="viewWebsite(2)" aria-label="Open mail host"><i class="fas fa-external-link-alt" aria-hidden="true"></i></button>
                         </div>
                     </div>
-                    <div class="website-metrics">
-                        <div class="metric">
-                            <span class="metric-label">Uptime</span>
-                            <span class="metric-value" id="uptime2">100%</span>
-                        </div>
-                        <div class="metric">
-                            <span class="metric-label">Response Time</span>
-                            <span class="metric-value" id="response2">189ms</span>
-                        </div>
-                        <div class="metric">
-                            <span class="metric-label">Visitors Today</span>
-                            <span class="metric-value" id="visitors2">892</span>
-                        </div>
+                    <div class="mgmt-stats-row">
+                        <div class="mgmt-stat-item"><span>Zentyal VM</span><strong id="uptime2">Active</strong></div>
+                        <div class="mgmt-stat-item"><span>ZOL link</span><strong id="response2">Stable</strong></div>
+                        <div class="mgmt-stat-item"><span>Queue</span><strong id="visitors2">892</strong></div>
                     </div>
-                    <div class="website-progress">
-                        <div class="progress-item">
-                            <span>CPU Usage</span>
-                            <div class="progress-bar-small">
-                                <div class="progress-fill-small" id="websiteCpu2" style="width: 42%"></div>
-                            </div>
+                    <div class="mgmt-resource-bars">
+                        <div class="mgmt-bar-group">
+                            <label><i class="fas fa-envelope" aria-hidden="true"></i> Mail traffic</label>
+                            <div class="mgmt-progress"><div class="mgmt-fill" id="websiteCpu2" style="width:20%;"></div></div>
                         </div>
-                        <div class="progress-item">
-                            <span>Memory Usage</span>
-                            <div class="progress-bar-small">
-                                <div class="progress-fill-small" id="websiteMem2" style="width: 67%"></div>
-                            </div>
+                        <div class="mgmt-bar-group">
+                            <label><i class="fas fa-hdd" aria-hidden="true"></i> HDD storage</label>
+                            <div class="mgmt-progress"><div class="mgmt-fill" id="websiteMem2" style="width:80%;"></div></div>
                         </div>
                     </div>
                 </div>
 
-                <div class="website-card" id="website3">
-                    <div class="website-header">
-                        <div class="website-info">
+                <div class="mgmt-glass-card" id="website3">
+                    <div class="mgmt-card-top">
+                        <div class="mgmt-card-title-row">
                             <h3>cctn-apps.co.zw</h3>
-                            <span class="website-status warning">Maintenance</span>
+                            <span class="status-badge warning website-status">● Maintenance</span>
                         </div>
-                        <div class="website-actions">
-                            <button class="action-btn-tiny" onclick="toggleWebsite(3)">
-                                <i class="fas fa-power-off"></i>
-                            </button>
-                            <button class="action-btn-tiny" onclick="viewWebsite(3)">
-                                <i class="fas fa-external-link-alt"></i>
-                            </button>
+                        <div class="mgmt-card-actions">
+                            <button type="button" class="mgmt-icon-btn" onclick="toggleWebsite(3)" aria-label="Toggle app host"><i class="fas fa-power-off" aria-hidden="true"></i></button>
+                            <button type="button" class="mgmt-icon-btn" onclick="viewWebsite(3)" aria-label="Open app host"><i class="fas fa-external-link-alt" aria-hidden="true"></i></button>
                         </div>
                     </div>
-                    <div class="website-metrics">
-                        <div class="metric">
-                            <span class="metric-label">Uptime</span>
-                            <span class="metric-value" id="uptime3">98.5%</span>
-                        </div>
-                        <div class="metric">
-                            <span class="metric-label">Response Time</span>
-                            <span class="metric-value" id="response3">312ms</span>
-                        </div>
-                        <div class="metric">
-                            <span class="metric-label">Visitors Today</span>
-                            <span class="metric-value" id="visitors3">2,156</span>
-                        </div>
+                    <div class="mgmt-stats-row">
+                        <div class="mgmt-stat-item"><span>Uptime</span><strong id="uptime3">98.5%</strong></div>
+                        <div class="mgmt-stat-item"><span>Response</span><strong id="response3">312ms</strong></div>
+                        <div class="mgmt-stat-item"><span>Visitors</span><strong id="visitors3">2,156</strong></div>
                     </div>
-                    <div class="website-progress">
-                        <div class="progress-item">
-                            <span>CPU Usage</span>
-                            <div class="progress-bar-small">
-                                <div class="progress-fill-small" id="websiteCpu3" style="width: 78%"></div>
-                            </div>
+                    <div class="mgmt-resource-bars">
+                        <div class="mgmt-bar-group">
+                            <label><i class="fas fa-microchip" aria-hidden="true"></i> CPU Usage</label>
+                            <div class="mgmt-progress"><div class="mgmt-fill" id="websiteCpu3" style="width:78%;"></div></div>
                         </div>
-                        <div class="progress-item">
-                            <span>Memory Usage</span>
-                            <div class="progress-bar-small">
-                                <div class="progress-fill-small" id="websiteMem3" style="width: 89%"></div>
-                            </div>
+                        <div class="mgmt-bar-group">
+                            <label><i class="fas fa-memory" aria-hidden="true"></i> VM Memory</label>
+                            <div class="mgmt-progress"><div class="mgmt-fill" id="websiteMem3" style="width:89%;"></div></div>
                         </div>
                     </div>
                 </div>
@@ -932,12 +880,8 @@
         </div>
     </div>
 
-    <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        // Debug script to prevent 405 errors
-        console.log('CCTN Website loaded - Form should work without server');
-    </script>
-    <script src="script.js?v=6"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+    <script src="script.js?v=7" defer></script>
 </body>
 </html>
