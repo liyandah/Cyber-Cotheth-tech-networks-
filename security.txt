@@ -1,0 +1,33 @@
+Contact: mailto:security@cybercothtechnetwotks.co.zw
+Contact: tel:+263-774-914-287
+Expires: 2025-12-31T23:59:59.000Z
+Encryption: https://cybercothtechnetwotks.co.zw/.well-known/pgp-key.txt
+Preferred-Languages: en
+Canonical: https://cybercothtechnetwotks.co.zw/.well-known/security.txt
+Policy: https://cybercothtechnetwotks.co.zw/security-policy
+
+# Security Policy
+# We take security seriously and appreciate responsible disclosure of vulnerabilities.
+# 
+# Scope:
+# - cybercothtechnetwotks.co.zw and all subdomains
+# - All web applications and services
+# 
+# Out of Scope:
+# - Social engineering attacks
+# - Physical attacks
+# - Denial of service attacks
+# 
+# Response Time:
+# - We will acknowledge receipt within 24 hours
+# - We will provide regular updates on progress
+# - We aim to resolve issues within 30 days
+# 
+# Rewards:
+# - Recognition in our security hall of fame
+# - No monetary rewards at this time
+# 
+# Please do not:
+# - Access or modify data that doesn't belong to you
+# - Disrupt our services
+# - Publicly disclose vulnerabilities before we've had a chance to fix them

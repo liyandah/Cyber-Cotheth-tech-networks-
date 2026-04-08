@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Setup Instructions - CCTN Website</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #FF7033;
+            text-align: center;
+        }
+        h2 {
+            color: #333;
+            border-bottom: 2px solid #FF7033;
+            padding-bottom: 5px;
+        }
+        .step {
+            background: #f9f9f9;
+            padding: 15px;
+            margin: 15px 0;
+            border-left: 4px solid #FF7033;
+            border-radius: 5px;
+        }
+        .warning {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        .success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        code {
+            background: #f1f1f1;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+        .file-list {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📧 Email Setup Instructions</h1>
+        <p><strong>For CCTN Cloud Development Suite Website</strong></p>
+        
+        <div class="warning">
+            <strong>⚠️ Current Issue:</strong> You're seeing a 405 error because PHP files need to run on a web server, not directly in the browser.
+        </div>
+
+        <h2>🔧 How to Fix the Form Submission</h2>
+
+        <div class="step">
+            <h3>Option 1: Upload to a Web Server (Recommended)</h3>
+            <p>Upload your website files to a web hosting service that supports PHP:</p>
+            <ul>
+                <li><strong>Free Options:</strong> 000webhost, InfinityFree, or GitHub Pages (with serverless functions)</li>
+                <li><strong>Paid Options:</strong> Hostinger, Bluehost, or any PHP hosting</li>
+                <li>Upload all files including <code>send_email.php</code></li>
+                <li>Test the contact form on the live server</li>
+            </ul>
+        </div>
+
+        <div class="step">
+            <h3>Option 2: Use Local Server (For Testing)</h3>
+            <p>If you want to test locally, you need a local server:</p>
+            <ul>
+                <li><strong>XAMPP:</strong> Download and install XAMPP, start Apache, put files in htdocs folder</li>
+                <li><strong>WAMP:</strong> Similar to XAMPP for Windows</li>
+                <li><strong>MAMP:</strong> For Mac users</li>
+                <li>Access via <code>http://localhost/your-folder/</code></li>
+            </ul>
+        </div>
+
+        <div class="step">
+            <h3>Option 3: Use Form Service (No Server Required)</h3>
+            <p>Replace the PHP with a form service like:</p>
+            <ul>
+                <li><strong>Formspree:</strong> Free form handling service</li>
+                <li><strong>Netlify Forms:</strong> If hosting on Netlify</li>
+                <li><strong>EmailJS:</strong> Send emails directly from JavaScript</li>
+            </ul>
+        </div>
+
+        <h2>📁 Files You Need</h2>
+        <div class="file-list">
+            <h4>Essential Files:</h4>
+            <ul>
+                <li><code>index.html</code> - Main website file</li>
+                <li><code>style.css</code> - All styling</li>
+                <li><code>script.js</code> - JavaScript functionality</li>
+                <li><code>send_email.php</code> - Email handler (needs server)</li>
+                <li><code>img/</code> folder with your images</li>
+            </ul>
+            
+            <h4>Optional Files:</h4>
+            <ul>
+                <li><code>sitemap.xml</code> - SEO sitemap</li>
+                <li><code>robots.txt</code> - Search engine instructions</li>
+                <li><code>security.txt</code> - Security contact info</li>
+                <li><code>.htaccess</code> - Server security rules</li>
+            </ul>
+        </div>
+
+        <h2>✅ Current Status</h2>
+        <div class="success">
+            <p><strong>✅ What's Working:</strong></p>
+            <ul>
+                <li>Website displays correctly</li>
+                <li>All animations and interactions work</li>
+                <li>Form validation works</li>
+                <li>Social media icons work</li>
+                <li>Responsive design works on all devices</li>
+            </ul>
+            
+            <p><strong>⚠️ What Needs Server:</strong></p>
+            <ul>
+                <li>Email sending (send_email.php)</li>
+                <li>Form submission to email</li>
+            </ul>
+        </div>
+
+        <h2>🚀 Quick Fix for Now</h2>
+        <div class="step">
+            <p>The form will now show contact information when it can't send emails. Users can still contact you via:</p>
+            <ul>
+                <li><strong>Email:</strong> info@cybercothtechnetwotks.co.zw</li>
+                <li><strong>Phone:</strong> +263 774 914 287</li>
+                <li><strong>WhatsApp:</strong> Direct chat link</li>
+            </ul>
+        </div>
+
+        <h2>📞 Need Help?</h2>
+        <p>If you need help setting up the email functionality, contact:</p>
+        <ul>
+            <li><strong>Email:</strong> info@cybercothtechnetwotks.co.zw</li>
+            <li><strong>Phone:</strong> +263 774 914 287</li>
+        </ul>
+    </div>
+</body>
+</html>

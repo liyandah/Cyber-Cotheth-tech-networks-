@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Validation Test - CCTN</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .btn-primary {
+            background: #FF7033;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .btn-primary:hover {
+            background: #e55a1a;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f0f8ff;
+            border: 1px solid #b0d4f1;
+            border-radius: 5px;
+            display: none;
+        }
+        .error {
+            background: #ffe6e6;
+            border-color: #ff9999;
+            color: #cc0000;
+        }
+        .success {
+            background: #e6ffe6;
+            border-color: #99ff99;
+            color: #006600;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🧪 Form Validation Test</h1>
+        <p>This page tests the form validation with the same data from your screenshot.</p>
+        <p><strong>Email will be sent to:</strong> liyandahhella12@gmail.com</p>
+        
+        <form id="testForm">
+            <div class="form-group">
+                <input type="text" name="name" placeholder="Your Name" value="hela" required>
+            </div>
+            <div class="form-group">
+                <input type="email" name="email" placeholder="Your Email" value="lhela@okzim.co.zw" required>
+            </div>
+            <div class="form-group">
+                <input type="tel" name="phone" placeholder="Your Phone" value="0774914287">
+            </div>
+            <div class="form-group">
+                <select name="service" required>
+                    <option value="web-development">Web Development & Hosting</option>
+                    <option value="hosting">Cloud Hosting</option>
+                    <option value="seo">SEO Optimization</option>
+                    <option value="app-development">App Development</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <textarea name="message" placeholder="Your Message" rows="5" value="hie" required>hie</textarea>
+            </div>
+            <button type="submit" class="btn-primary">Test Form Validation</button>
+        </form>
+        
+        <div id="result" class="result">
+            <h3>✅ Validation Results:</h3>
+            <div id="resultContent"></div>
+        </div>
+    </div>
+
+    <script>
+        // Copy the validation function from the main script
+        function validateForm(data) {
+            console.log('Validating form data:', data);
+            const requiredFields = ['name', 'email', 'message', 'service'];
+            
+            // Check required fields with specific error messages
+            for (const field of requiredFields) {
+                console.log(`Checking field ${field}:`, data[field]);
+                if (!data[field] || data[field].trim() === '') {
+                    const fieldName = field.charAt(0).toUpperCase() + field.slice(1);
+                    console.log(`Field ${field} is empty or invalid`);
+                    return { success: false, message: `${fieldName} is required` };
+                }
+            }
+            
+            // Email validation with regex
+            const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            console.log('Email validation:', data.email, emailRegex.test(data.email));
+            if (!emailRegex.test(data.email)) {
+                console.log('Email validation failed');
+                return { success: false, message: 'Please enter a valid email address' };
+            }
+            
+            // Name validation
+            if (data.name.length < 2) {
+                return { success: false, message: 'Name must be at least 2 characters long' };
+            }
+            
+            // Message validation
+            console.log('Message validation:', data.message, 'Length:', data.message.length);
+            if (data.message.length < 3) {
+                console.log('Message validation failed - too short');
+                return { success: false, message: 'Message must be at least 3 characters long' };
+            }
+            
+            console.log('Form validation passed successfully');
+            return { success: true, message: 'All validation checks passed!' };
+        }
+
+        document.getElementById('testForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            console.log('Test form submitted');
+            
+            // Get form data
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData);
+            
+            console.log('Form data:', data);
+            
+            // Validate
+            const result = validateForm(data);
+            
+            // Show result
+            const resultDiv = document.getElementById('result');
+            const contentDiv = document.getElementById('resultContent');
+            
+            if (result.success) {
+                resultDiv.className = 'result success';
+                contentDiv.innerHTML = `
+                    <p><strong>✅ SUCCESS:</strong> ${result.message}</p>
+                    <p><strong>Form Data:</strong></p>
+                    <ul>
+                        <li><strong>Name:</strong> ${data.name}</li>
+                        <li><strong>Email:</strong> ${data.email}</li>
+                        <li><strong>Phone:</strong> ${data.phone || 'Not provided'}</li>
+                        <li><strong>Service:</strong> ${data.service}</li>
+                        <li><strong>Message:</strong> ${data.message}</li>
+                    </ul>
+                    <p style="color: green;"><strong>Form should submit successfully!</strong></p>
+                `;
+            } else {
+                resultDiv.className = 'result error';
+                contentDiv.innerHTML = `
+                    <p><strong>❌ ERROR:</strong> ${result.message}</p>
+                    <p><strong>Form Data:</strong></p>
+                    <ul>
+                        <li><strong>Name:</strong> "${data.name}" (Length: ${data.name.length})</li>
+                        <li><strong>Email:</strong> "${data.email}" (Valid: ${/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(data.email)})</li>
+                        <li><strong>Phone:</strong> "${data.phone || 'Not provided'}"</li>
+                        <li><strong>Service:</strong> "${data.service}"</li>
+                        <li><strong>Message:</strong> "${data.message}" (Length: ${data.message.length})</li>
+                    </ul>
+                `;
+            }
+            
+            resultDiv.style.display = 'block';
+        });
+    </script>
+</body>
+</html>
