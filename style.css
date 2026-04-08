@@ -2406,6 +2406,10 @@ section[id] {
     overflow: hidden;
 }
 
+.portfolio-enterprise .portfolio-item + .portfolio-item {
+    margin-top: 28px;
+}
+
 .portfolio-enterprise .p-info {
     padding: 28px;
 }
