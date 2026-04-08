@@ -24,7 +24,7 @@ $message .= "Service: " . $test_data['service'] . "\n";
 $message .= "Message: " . $test_data['message'] . "\n";
 $message .= "Time: " . date('Y-m-d H:i:s') . "\n";
 
-$headers = "From: noreply@cybercothtechnetwotks.co.zw\r\n";
+$headers = "From: noreply@cybercothtechnetworks.co.zw\r\n";
 $headers .= "Reply-To: " . $test_data['email'] . "\r\n";
 $headers .= "X-Mailer: PHP/" . phpversion() . "\r\n";
 
@@ -32,7 +32,7 @@ echo "<p><strong>Email Details:</strong></p>";
 echo "<ul>";
 echo "<li><strong>To:</strong> $to</li>";
 echo "<li><strong>Subject:</strong> $subject</li>";
-echo "<li><strong>From:</strong> noreply@cybercothtechnetwotks.co.zw</li>";
+echo "<li><strong>From:</strong> noreply@cybercothtechnetworks.co.zw</li>";
 echo "</ul>";
 
 echo "<p><strong>Message Content:</strong></p>";

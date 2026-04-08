@@ -70,7 +70,7 @@ User Agent: " . ($_SERVER['HTTP_USER_AGENT'] ?? 'Unknown') . "
 
 ---
 This message was sent from the CCTN Cloud Development Suite contact form.
-Website: https://cybercothtechnetwotks.co.zw
+Website: https://www.cybercothtechnetworks.co.zw
 ";
 
 // Try multiple email methods
@@ -80,7 +80,7 @@ $error_message = '';
 // Method 1: Try basic PHP mail() function
 if (function_exists('mail')) {
     $headers = array(
-        'From' => "CCTN Website <noreply@cybercothtechnetwotks.co.zw>",
+        'From' => "CCTN Website <noreply@cybercothtechnetworks.co.zw>",
         'Reply-To' => $email,
         'X-Mailer' => 'PHP/' . phpversion(),
         'Content-Type' => 'text/plain; charset=UTF-8'
@@ -113,7 +113,7 @@ if (!$email_sent && class_exists('PHPMailer\PHPMailer\PHPMailer')) {
         $mail->Port = 587;
         
         // Recipients
-        $mail->setFrom('noreply@cybercothtechnetwotks.co.zw', 'CCTN Website');
+        $mail->setFrom('noreply@cybercothtechnetworks.co.zw', 'CCTN Website');
         $mail->addAddress($to);
         $mail->addReplyTo($email, $name);
         

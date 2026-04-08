@@ -237,7 +237,7 @@ function updateServerMetrics() {
 // Update website metrics
 function updateWebsiteMetrics() {
     const websites = [
-        { id: 1, baseResponse: 245, baseVisitors: 1247 }, // cybercothtechnetwotks.co.zw
+        { id: 1, baseResponse: 245, baseVisitors: 1247 }, // www.cybercothtechnetworks.co.zw
         { id: 2, baseResponse: 189, baseVisitors: 892 },  // cctn-dashboard.co.zw
         { id: 3, baseResponse: 312, baseVisitors: 2156 }  // cctn-apps.co.zw
     ];
@@ -275,7 +275,7 @@ function updateWebsiteMetrics() {
 // Add random activities
 function addRandomActivity() {
     const activities = [
-        { text: 'New user registered on cybercothtechnetwotks.co.zw', type: 'success' },
+        { text: 'New user registered on www.cybercothtechnetworks.co.zw', type: 'success' },
         { text: 'Database backup completed successfully', type: 'info' },
         { text: 'SSL certificate renewed for cctn-dashboard.co.zw', type: 'success' },
         { text: 'High traffic detected on cctn-apps.co.zw', type: 'warning' },
@@ -382,7 +382,7 @@ function toggleWebsite(websiteId) {
 }
 
 function viewWebsite(websiteId) {
-    const websites = ['cybercothtechnetwotks.co.zw', 'cctn-dashboard.co.zw', 'cctn-apps.co.zw'];
+    const websites = ['www.cybercothtechnetworks.co.zw', 'cctn-dashboard.co.zw', 'cctn-apps.co.zw'];
     const url = `https://${websites[websiteId - 1]}`;
     window.open(url, '_blank');
     addActivityToFeed(`Opened ${websites[websiteId - 1]} in new tab`, 'info');
@@ -761,7 +761,7 @@ IP: ${data.ip}
 
 ---
 This message was sent from the CCTN Cloud Development Suite contact form.
-Website: https://cybercothtechnetwotks.co.zw
+Website: https://www.cybercothtechnetworks.co.zw
 
 Please send this email to: liyandahhella12@gmail.com
     `.trim();

@@ -85,8 +85,8 @@ $test_message .= "Server: " . ($_SERVER['SERVER_NAME'] ?? 'Unknown') . "\n";
 $test_message .= "PHP Version: " . phpversion() . "\n\n";
 $test_message .= "If you receive this email, your server can send emails successfully!";
 
-$test_headers = "From: noreply@cybercothtechnetwotks.co.zw\r\n";
-$test_headers .= "Reply-To: noreply@cybercothtechnetwotks.co.zw\r\n";
+$test_headers = "From: noreply@cybercothtechnetworks.co.zw\r\n";
+$test_headers .= "Reply-To: noreply@cybercothtechnetworks.co.zw\r\n";
 $test_headers .= "X-Mailer: PHP/" . phpversion() . "\r\n";
 
 echo "<p><strong>Attempting to send test email to:</strong> $test_email</p>";

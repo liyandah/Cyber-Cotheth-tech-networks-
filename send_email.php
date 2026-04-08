@@ -53,7 +53,7 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 // Email configuration
 $to = 'liyandahhella12@gmail.com';
 $subject = 'New Contact Form Submission - CCTN Website';
-$from_email = 'noreply@cybercothtechnetwotks.co.zw';
+$from_email = 'noreply@cybercothtechnetworks.co.zw';
 $from_name = 'CCTN Website Contact Form';
 
 // Create email content
@@ -72,7 +72,7 @@ User Agent: " . ($_SERVER['HTTP_USER_AGENT'] ?? 'Unknown') . "
 
 ---
 This message was sent from the CCTN Cloud Development Suite contact form.
-Website: https://cybercothtechnetwotks.co.zw
+Website: https://www.cybercothtechnetworks.co.zw
 ";
 
 // Email headers
