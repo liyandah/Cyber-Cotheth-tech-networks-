@@ -2852,15 +2852,23 @@ section[id] {
 }
 
 @media (max-width: 768px) {
+    /* Extreme speed: drop layered backgrounds, solid fill */
+    .hero-enterprise,
+    .management-suite {
+        background-image: none !important;
+        background-color: #0b0e14;
+    }
+
     .hero.hero-enterprise .hero-carousel {
         display: none;
     }
 
     .hero.hero-enterprise {
-        background: linear-gradient(160deg, #0b0e14 0%, #1a2332 48%, #0b0e14 100%);
+        background: #0b0e14;
         min-height: 100vh;
     }
 
+    .p-preview iframe,
     .p-preview .p-preview-iframe {
         display: none !important;
     }
@@ -2880,5 +2888,10 @@ section[id] {
 
     .mgmt-stat-item {
         text-align: left;
+    }
+
+    * {
+        animation: none !important;
+        transition: none !important;
     }
 }
