@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
@@ -46,7 +46,7 @@
     <meta http-equiv="X-Frame-Options" content="DENY">
     <meta http-equiv="X-XSS-Protection" content="1; mode=block">
     <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
-    <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), interest-cohort=()">
+    <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(self), interest-cohort=()">
     <meta name="format-detection" content="telephone=no">
     <meta name="theme-color" content="#FF7033">
     
@@ -58,6 +58,7 @@
         font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com;
         img-src 'self' data: https:;
         connect-src 'self' https:;
+        frame-src 'self' https://himmelstor.co.zw;
         frame-ancestors 'none';
         base-uri 'self';
         form-action 'self';
@@ -73,9 +74,9 @@
     <link rel="dns-prefetch" href="//fonts.googleapis.com">
     <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
     
-    <link rel="stylesheet" href="style.css?v=3">
+    <link rel="stylesheet" href="style.css?v=5">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- Structured Data for Local Business -->
     <script type="application/ld+json">
@@ -148,20 +149,32 @@
     </script>
 </head>
 <body>
+    <div class="top-bar" role="region" aria-label="Status">
+        <div class="status-container">
+            <span id="weather-display"><i class="fas fa-sun" aria-hidden="true"></i> Loading Zimbabwe weather…</span>
+            <span id="location-display"><i class="fas fa-satellite" aria-hidden="true"></i> GPS: awaiting permission…</span>
+            <div class="theme-switcher">
+                <button type="button" id="theme-btn" aria-label="Toggle color theme"><i class="fas fa-moon" aria-hidden="true"></i> Mode</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Navigation -->
-    <nav class="navbar">
+    <nav class="navbar glass-navbar">
         <div class="nav-container">
             <div class="nav-logo">
                 <div class="logo-icon">C</div>
                 <span class="logo-text">CCTN</span>
+                <span class="nav-tagline" aria-hidden="true"><span class="nav-divider">|</span> Cyber Comptech Networks</span>
             </div>
             <div class="nav-menu" id="nav-menu">
                 <a href="#home" class="nav-link active">Home</a>
                 <a href="#services" class="nav-link">Services</a>
-                <a href="#video" class="nav-link">Demo</a>
+                <a href="#hosting" class="nav-link">Hosting</a>
+                <a href="#portfolio" class="nav-link">Demo</a>
                 <a href="#dashboard" class="nav-link">Dashboard</a>
                 <a href="#about" class="nav-link">About</a>
-                <a href="#contact" class="nav-link">Contact</a>
+                <a href="#contact" class="nav-link cta-nav-pill">Contact</a>
             </div>
             <div class="nav-toggle" id="nav-toggle">
                 <span class="bar"></span>
@@ -172,7 +185,7 @@
     </nav>
 
     <!-- Hero Section -->
-    <section id="home" class="hero">
+    <section id="home" class="hero hero-enterprise">
         <!-- Hero Image Carousel -->
         <div class="hero-carousel">
             <div class="carousel-container">
@@ -280,8 +293,69 @@
         </div>
     </section>
 
+    <!-- Enterprise: Infrastructure & Hosting -->
+    <section id="hosting" class="enterprise-hosting glass-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Enterprise Infrastructure &amp; Hosting</h2>
+                <p class="section-description">We host on your place or ours.</p>
+            </div>
+            <div class="enterprise-grid">
+                <div class="e-card glass-card">
+                    <div class="icon-box"><i class="fas fa-server" aria-hidden="true"></i></div>
+                    <h3 class="e-card-title">On-Premise &amp; Local Hosting</h3>
+                    <p>We can do local hosting on your server, giving you hosting at your place. We host servers on-premise for maximum security.</p>
+                </div>
+                <div class="e-card glass-card">
+                    <div class="icon-box"><i class="fas fa-envelope-open-text" aria-hidden="true"></i></div>
+                    <h3 class="e-card-title">Professional Email</h3>
+                    <p>Host your own email with <strong>Zentyal</strong> and <strong>ZOL</strong> integration. Complete domain control and privacy.</p>
+                </div>
+                <div class="e-card glass-card">
+                    <div class="icon-box"><i class="fas fa-cloud" aria-hidden="true"></i></div>
+                    <h3 class="e-card-title">Cloud &amp; App Development</h3>
+                    <p>We create and host sites, develop apps, and build intelligent Chat Bots. We host servers on the cloud for 99.9% uptime.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio / Demo preview -->
+    <section id="portfolio" class="portfolio-enterprise glass-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Our Development Portfolio</h2>
+                <p class="section-description">Live preview — explore a flagship build without leaving this site.</p>
+            </div>
+            <div class="portfolio-item glass-card">
+                <div class="p-info">
+                    <h3>Himmelstor</h3>
+                    <p>A comprehensive e-commerce and logistics solution developed by CCTN.</p>
+                    <a href="https://himmelstor.co.zw/" target="_blank" rel="noopener noreferrer" class="p-link">Visit himmelstor.co.zw <i class="fas fa-external-link-alt" aria-hidden="true"></i></a>
+                </div>
+                <div class="p-preview">
+                    <iframe src="https://himmelstor.co.zw/" title="Himmelstor preview" loading="lazy"></iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Payment gateways -->
+    <section class="payments-bar glass-section" aria-label="Integrated payment gateways">
+        <div class="container">
+            <h3 class="payments-title">Integrated Payment Gateways</h3>
+            <div class="gateway-icons">
+                <span class="gate">EcoCash</span>
+                <span class="gate">OneMoney</span>
+                <span class="gate">OMari</span>
+                <span class="gate">InBucks</span>
+                <span class="gate">ZimSwitch</span>
+            </div>
+        </div>
+    </section>
+
     <!-- Services Section -->
-    <section id="services" class="services">
+    <section id="services" class="services glass-section">
         <div class="container">
             <div class="section-header">
                 <h2 class="section-title">Our Services</h2>
@@ -804,7 +878,8 @@
                 <div class="footer-links">
                     <a href="#home">Home</a>
                     <a href="#services">Services</a>
-                    <a href="#video">Demo</a>
+                    <a href="#hosting">Hosting</a>
+                    <a href="#portfolio">Demo</a>
                     <a href="#dashboard">Dashboard</a>
                     <a href="#about">About</a>
                     <a href="#contact">Contact</a>
@@ -853,6 +928,6 @@
         // Debug script to prevent 405 errors
         console.log('CCTN Website loaded - Form should work without server');
     </script>
-    <script src="script.js?v=3"></script>
+    <script src="script.js?v=5"></script>
 </body>
 </html>

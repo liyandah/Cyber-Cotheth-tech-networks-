@@ -1,5 +1,11 @@
 // CCTN Cloud Development Suite - JavaScript
 
+function getFixedHeaderOffset() {
+    const tb = document.querySelector('.top-bar');
+    const nav = document.querySelector('.navbar');
+    return (tb ? tb.offsetHeight : 42) + (nav ? nav.offsetHeight : 70);
+}
+
 // DOM Elements
 const navToggle = document.getElementById('nav-toggle');
 const navMenu = document.getElementById('nav-menu');
@@ -8,8 +14,66 @@ const modal = document.getElementById('modal');
 const modalBody = document.getElementById('modal-body');
 const contactForm = document.getElementById('contactForm');
 
+function initializeEnterpriseUI() {
+    const htmlEl = document.documentElement;
+    const saved = localStorage.getItem('cctn-theme');
+    if (saved === 'light' || saved === 'dark') {
+        htmlEl.setAttribute('data-theme', saved);
+    }
+    const themeBtn = document.getElementById('theme-btn');
+    if (themeBtn) {
+        const syncLabel = () => {
+            const t = htmlEl.getAttribute('data-theme') || 'dark';
+            themeBtn.innerHTML = t === 'dark'
+                ? '<i class="fas fa-moon" aria-hidden="true"></i> Dark'
+                : '<i class="fas fa-sun" aria-hidden="true"></i> Light';
+        };
+        syncLabel();
+        themeBtn.addEventListener('click', () => {
+            const current = htmlEl.getAttribute('data-theme') || 'dark';
+            const next = current === 'dark' ? 'light' : 'dark';
+            htmlEl.setAttribute('data-theme', next);
+            localStorage.setItem('cctn-theme', next);
+            syncLabel();
+        });
+    }
+    fetchWeatherZimbabwe();
+    getGPSStatus();
+}
+
+async function fetchWeatherZimbabwe() {
+    const el = document.getElementById('weather-display');
+    if (!el) return;
+    try {
+        const res = await fetch('https://wttr.in/Harare?format=%c+%t');
+        const text = (await res.text()).trim();
+        el.innerHTML = `<i class="fas fa-temperature-high" aria-hidden="true"></i> Harare: ${text}`;
+    } catch (e) {
+        el.innerHTML = '<i class="fas fa-cloud-sun" aria-hidden="true"></i> Zimbabwe weather unavailable';
+    }
+}
+
+function getGPSStatus() {
+    const el = document.getElementById('location-display');
+    if (!el) return;
+    if (!navigator.geolocation) {
+        el.innerHTML = '<i class="fas fa-map-marker-alt" aria-hidden="true"></i> Location: Zimbabwe';
+        return;
+    }
+    navigator.geolocation.getCurrentPosition(
+        () => {
+            el.innerHTML = '<i class="fas fa-location-arrow" aria-hidden="true"></i> GPS: locked (secure connection)';
+        },
+        () => {
+            el.innerHTML = '<i class="fas fa-map-pin" aria-hidden="true"></i> Location: Zimbabwe';
+        },
+        { timeout: 10000, maximumAge: 600000 }
+    );
+}
+
 // Initialize the application
 document.addEventListener('DOMContentLoaded', function() {
+    initializeEnterpriseUI();
     initializeNavigation();
     initializeScrollEffects();
     initializeCharts();
@@ -21,6 +85,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Navigation functionality
 function initializeNavigation() {
+    if (!navToggle || !navMenu) return;
     // Mobile menu toggle
     navToggle.addEventListener('click', function() {
         navMenu.classList.toggle('active');
@@ -58,7 +123,7 @@ function initializeNavigation() {
 // Update active navigation link based on scroll position
 function updateActiveLink() {
     const sections = document.querySelectorAll('section[id]');
-    const scrollPos = window.scrollY + 100;
+    const scrollPos = window.scrollY + getFixedHeaderOffset() + 24;
 
     sections.forEach(section => {
         const sectionTop = section.offsetTop;
@@ -80,7 +145,7 @@ function updateActiveLink() {
 function scrollToSection(sectionId) {
     const element = document.getElementById(sectionId);
     if (element) {
-        const offsetTop = element.offsetTop - 70; // Account for fixed navbar
+        const offsetTop = element.offsetTop - getFixedHeaderOffset();
         window.scrollTo({
             top: offsetTop,
             behavior: 'smooth'
@@ -93,12 +158,23 @@ function initializeScrollEffects() {
     // Add scroll event listener for navbar background
     window.addEventListener('scroll', function() {
         const navbar = document.querySelector('.navbar');
+        if (!navbar) return;
+        const isGlass = navbar.classList.contains('glass-navbar');
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
         if (window.scrollY > 50) {
-            navbar.style.background = 'rgba(255, 255, 255, 0.95)';
-            navbar.style.backdropFilter = 'blur(10px)';
+            if (isGlass) {
+                navbar.style.background = isDark ? 'rgba(10, 14, 23, 0.94)' : 'rgba(255, 255, 255, 0.95)';
+            } else {
+                navbar.style.background = 'rgba(255, 255, 255, 0.95)';
+            }
+            navbar.style.backdropFilter = 'blur(12px)';
         } else {
-            navbar.style.background = 'var(--cctn-white)';
-            navbar.style.backdropFilter = 'none';
+            if (isGlass) {
+                navbar.style.background = isDark ? 'var(--nav-glass)' : 'rgba(255, 255, 255, 0.85)';
+            } else {
+                navbar.style.background = 'var(--cctn-white)';
+            }
+            navbar.style.backdropFilter = isGlass ? 'blur(18px)' : 'none';
         }
     });
 
@@ -117,7 +193,7 @@ function initializeScrollEffects() {
     }, observerOptions);
 
     // Observe elements for animation
-    const animateElements = document.querySelectorAll('.service-card, .dashboard-card, .contact-item');
+    const animateElements = document.querySelectorAll('.service-card, .dashboard-card, .contact-item, .glass-card, .e-card');
     animateElements.forEach(el => observer.observe(el));
 }
 
