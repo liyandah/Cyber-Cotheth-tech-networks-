@@ -2948,6 +2948,64 @@ section[id] {
 }
 
 @media (max-width: 768px) {
+    /* MOBILE PERFORMANCE MODE (max speed) */
+    .top-bar {
+        position: relative !important;
+        min-height: auto;
+        font-size: 11px;
+        padding: 8px 5px;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+    }
+
+    body {
+        padding-top: var(--nav-offset) !important;
+    }
+
+    .navbar.glass-navbar {
+        top: 0 !important;
+    }
+
+    .nav-container {
+        padding: 0 10px;
+    }
+
+    .logo-container {
+        gap: 8px;
+    }
+
+    .cctn-svg {
+        width: 40px;
+        height: 40px;
+        filter: none !important;
+    }
+
+    .brand-main {
+        font-size: 1.05rem;
+        letter-spacing: 0.06em;
+    }
+
+    .hero-title {
+        font-size: 24px !important;
+        margin-top: 20px;
+    }
+
+    .hero-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        width: 90%;
+        margin: 0 auto;
+        align-items: stretch;
+    }
+
+    .btn-primary,
+    .btn-outline {
+        padding: 12px !important;
+        font-size: 14px !important;
+        justify-content: center;
+    }
+
     /* Extreme speed: drop layered backgrounds, solid fill */
     .hero-enterprise,
     .management-suite {
@@ -2984,6 +3042,15 @@ section[id] {
 
     .mgmt-stat-item {
         text-align: left;
+    }
+
+    /* Disable heavy visual effects on slower mobile CPUs */
+    .glass-card,
+    .mgmt-glass-card,
+    .hero-enterprise {
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        box-shadow: none !important;
     }
 
     * {

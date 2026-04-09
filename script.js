@@ -37,8 +37,6 @@ function initializeEnterpriseUI() {
             syncLabel();
         });
     }
-    fetchWeatherZimbabwe();
-    getGPSStatus();
 }
 
 async function fetchWeatherZimbabwe() {
@@ -80,6 +78,12 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeContactForm();
     initializeAnimations();
     initializeLiveDashboard();
+});
+
+// Run non-critical features after first paint completes
+window.addEventListener('load', function() {
+    fetchWeatherZimbabwe();
+    getGPSStatus();
     initializeCarousel();
 });
 
