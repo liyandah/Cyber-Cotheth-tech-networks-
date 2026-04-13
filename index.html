@@ -58,6 +58,7 @@
         font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com;
         img-src 'self' data: https:;
         connect-src 'self' https:;
+        worker-src 'self';
         frame-src 'self' https://himmelstor.co.zw https://havenbabywear.co.zw;
         frame-ancestors 'none';
         base-uri 'self';
@@ -69,12 +70,52 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
     
     <!-- DNS Prefetch -->
     <link rel="dns-prefetch" href="//fonts.googleapis.com">
     <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
     
-    <link rel="stylesheet" href="style.css?v=11">
+    <style>
+        /* Critical above-the-fold: theme background + lightweight boot (no window.load wait) */
+        html[data-theme="dark"] { background-color: #0a0e17; }
+        html[data-theme="light"] { background-color: #f0f4f8; }
+        body { margin: 0; }
+        .page-boot {
+            position: fixed;
+            inset: 0;
+            z-index: 10001;
+            display: grid;
+            place-items: center;
+            pointer-events: none;
+            background: #0a0e17;
+            animation: cctnBootFade 0.55s ease 0.12s forwards;
+        }
+        html[data-theme="light"] .page-boot { background: #f0f4f8; }
+        .page-boot__word {
+            font-size: clamp(2rem, 8vw, 3rem);
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            font-family: system-ui, -apple-system, Segoe UI, sans-serif;
+            background: linear-gradient(135deg, #FF7033 0%, #FF8A5B 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: cctnBootPulse 0.9s ease-in-out infinite;
+        }
+        @keyframes cctnBootPulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.65; transform: scale(0.98); }
+        }
+        @keyframes cctnBootFade {
+            to { opacity: 0; visibility: hidden; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .page-boot { animation-duration: 0.01s; animation-delay: 0s; }
+            .page-boot__word { animation: none; }
+        }
+    </style>
+    <link rel="stylesheet" href="style.min.css?v=12">
     
     <!-- Structured Data for Local Business -->
     <script type="application/ld+json">
@@ -147,6 +188,7 @@
     </script>
 </head>
 <body>
+    <div class="page-boot" aria-hidden="true"><span class="page-boot__word">CCTN</span></div>
     <header class="site-header">
     <div class="top-bar status-bar" role="region" aria-label="Status">
         <div class="status-container">
@@ -201,15 +243,24 @@
         <div class="hero-carousel">
             <div class="carousel-container">
                 <div class="carousel-slide active">
-                    <img src="img/premium_photo-1661882403999-46081e67c401.jpeg" alt="CCTN AI-Powered Web Development Platform - Modern Technology Solutions for Zimbabwe Businesses" loading="eager" />
+                    <picture>
+                        <source type="image/webp" srcset="img/premium_photo-1661882403999-46081e67c401.webp">
+                        <img src="img/premium_photo-1661882403999-46081e67c401.jpeg" alt="CCTN AI-Powered Web Development Platform - Modern Technology Solutions for Zimbabwe Businesses" width="1920" height="1080" decoding="async" fetchpriority="high" loading="eager" />
+                    </picture>
                     <div class="carousel-overlay"></div>
                 </div>
                 <div class="carousel-slide">
-                    <img src="img/information-systems-computers.jpg" alt="Professional Information Systems and Computer Technology Services in Zimbabwe" loading="lazy" />
+                    <picture>
+                        <source type="image/webp" srcset="img/information-systems-computers.webp">
+                        <img src="img/information-systems-computers.jpg" alt="Professional Information Systems and Computer Technology Services in Zimbabwe" width="1920" height="1080" decoding="async" loading="lazy" />
+                    </picture>
                     <div class="carousel-overlay"></div>
                 </div>
                 <div class="carousel-slide">
-                    <img src="img/tech_52.png" alt="CCTN Technology Solutions - Cloud Development Suite for Zimbabwe Companies" loading="lazy" />
+                    <picture>
+                        <source type="image/webp" srcset="img/tech_52.webp">
+                        <img src="img/tech_52.png" alt="CCTN Technology Solutions - Cloud Development Suite for Zimbabwe Companies" width="800" height="800" decoding="async" loading="lazy" />
+                    </picture>
                     <div class="carousel-overlay"></div>
                 </div>
             </div>
@@ -517,9 +568,9 @@
                         <canvas id="websiteChart"></canvas>
                     </div>
                     <div class="chart-controls">
-                        <button class="chart-btn active" onclick="updateChart('monthly')">Monthly</button>
-                        <button class="chart-btn" onclick="updateChart('weekly')">Weekly</button>
-                        <button class="chart-btn" onclick="updateChart('daily')">Daily</button>
+                        <button type="button" class="chart-btn active" onclick="updateChart('monthly', this)">Monthly</button>
+                        <button type="button" class="chart-btn" onclick="updateChart('weekly', this)">Weekly</button>
+                        <button type="button" class="chart-btn" onclick="updateChart('daily', this)">Daily</button>
                     </div>
                 </div>
                 <div class="dashboard-card">
@@ -935,9 +986,10 @@
         </div>
     </div>
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
-    <script src="script.js?v=10" defer></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" media="print" onload="this.media='all'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"></noscript>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
+    <script src="script.min.js?v=12" defer></script>
 </body>
 </html>

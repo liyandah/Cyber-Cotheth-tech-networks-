@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeEnterpriseUI();
     initializeNavigation();
     initializeScrollEffects();
-    initializeCharts();
+    setupLazyCharts();
     initializeContactForm();
     initializeAnimations();
     initializeLiveDashboard();
@@ -207,7 +207,55 @@ let autoRefreshInterval;
 let isAutoRefresh = false;
 let activityCounter = 0;
 
-// Initialize charts
+let chartJsPromise = null;
+
+function loadChartJs() {
+    if (typeof Chart !== 'undefined') {
+        return Promise.resolve();
+    }
+    if (!chartJsPromise) {
+        chartJsPromise = new Promise(function(resolve, reject) {
+            const s = document.createElement('script');
+            s.src = 'https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js';
+            s.async = true;
+            s.onload = function() { resolve(); };
+            s.onerror = function() { reject(new Error('Chart.js failed to load')); };
+            document.head.appendChild(s);
+        });
+    }
+    return chartJsPromise;
+}
+
+function setupLazyCharts() {
+    const canvas = document.getElementById('websiteChart');
+    if (!canvas) return;
+
+    const target = document.getElementById('dashboard') || canvas;
+    let started = false;
+
+    function bootCharts() {
+        if (started) return;
+        started = true;
+        loadChartJs()
+            .then(function() { initializeCharts(); })
+            .catch(function() { /* optional chart; page still works */ });
+    }
+
+    if (!('IntersectionObserver' in window)) {
+        bootCharts();
+        return;
+    }
+
+    const io = new IntersectionObserver(function(entries) {
+        if (!entries.some(function(e) { return e.isIntersecting; })) return;
+        io.disconnect();
+        bootCharts();
+    }, { root: null, rootMargin: '140px 0px', threshold: 0.01 });
+
+    io.observe(target);
+}
+
+// Initialize charts (Chart global must exist — loaded via setupLazyCharts)
 function initializeCharts() {
     // Website statistics chart
     const ctx = document.getElementById('websiteChart');
@@ -489,12 +537,11 @@ function viewWebsite(websiteId) {
 }
 
 // Chart update function
-function updateChart(period) {
+function updateChart(period, btn) {
+    document.querySelectorAll('.chart-btn').forEach(function(b) { b.classList.remove('active'); });
+    if (btn) btn.classList.add('active');
+
     if (!websiteChart) return;
-    
-    // Update active button
-    document.querySelectorAll('.chart-btn').forEach(btn => btn.classList.remove('active'));
-    event.target.classList.add('active');
     
     // Update chart data based on period
     let newData;
@@ -1226,12 +1273,6 @@ function debounce(func, wait) {
 const debouncedScrollHandler = debounce(updateActiveLink, 10);
 window.addEventListener('scroll', debouncedScrollHandler);
 
-// Add loading animation
-window.addEventListener('load', function() {
-    document.body.classList.add('loaded');
-});
-
-
 // Binary Animation
 function initializeBinaryAnimation() {
     const binaryContainer = document.getElementById('binaryNumbers');
@@ -1371,46 +1412,8 @@ function showSlide(slideIndex) {
     }
 }
 
-// Add CSS for loading animation
-const loadingStyle = document.createElement('style');
-loadingStyle.textContent = `
-    body:not(.loaded) {
-        overflow: hidden;
-    }
-    
-    body:not(.loaded)::before {
-        content: '';
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: var(--cctn-white);
-        z-index: 9999;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    
-    body:not(.loaded)::after {
-        content: 'CCTN';
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        font-size: 3rem;
-        font-weight: bold;
-        background: var(--cctn-gradient);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        z-index: 10000;
-        animation: pulse 1.5s ease-in-out infinite;
-    }
-    
-    @keyframes pulse {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0.5; }
-    }
-`;
-document.head.appendChild(loadingStyle);
+if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+    window.addEventListener('load', function() {
+        navigator.serviceWorker.register('sw.js').catch(function() { /* ignore */ });
+    });
+}
