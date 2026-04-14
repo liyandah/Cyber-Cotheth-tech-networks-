@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', function() {
     setupLazyCharts();
     initializeContactForm();
     initializeAnimations();
-    initializeLiveDashboard();
+    setupLazyLiveDashboard();
 });
 
 // Run non-critical features after first paint completes
@@ -206,6 +206,42 @@ let websiteChart;
 let autoRefreshInterval;
 let isAutoRefresh = false;
 let activityCounter = 0;
+let realtimeIntervalId;
+let websiteIntervalId;
+let activityIntervalId;
+let serverPulseIntervalId;
+let websiteAnimIntervalId;
+
+function isLowPowerClient() {
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    const saveData = navigator.connection && navigator.connection.saveData;
+    return isMobile || Boolean(saveData);
+}
+
+function setupLazyLiveDashboard() {
+    const dashboard = document.getElementById('dashboard');
+    if (!dashboard) return;
+    let started = false;
+
+    const startOnce = function() {
+        if (started) return;
+        started = true;
+        initializeLiveDashboard();
+    };
+
+    if (!('IntersectionObserver' in window)) {
+        startOnce();
+        return;
+    }
+
+    const io = new IntersectionObserver(function(entries) {
+        if (!entries.some(function(entry) { return entry.isIntersecting; })) return;
+        io.disconnect();
+        startOnce();
+    }, { root: null, rootMargin: '180px 0px', threshold: 0.01 });
+
+    io.observe(dashboard);
+}
 
 let chartJsPromise = null;
 
@@ -312,14 +348,17 @@ function initializeLiveDashboard() {
 
 // Real-time updates
 function startRealTimeUpdates() {
+    if (document.hidden) return;
+    const lowPower = isLowPowerClient();
+
     // Update server metrics every 3 seconds
-    setInterval(updateServerMetrics, 3000);
+    realtimeIntervalId = setInterval(updateServerMetrics, lowPower ? 6000 : 3000);
     
     // Update website metrics every 5 seconds
-    setInterval(updateWebsiteMetrics, 5000);
+    websiteIntervalId = setInterval(updateWebsiteMetrics, lowPower ? 10000 : 5000);
     
     // Add new activities every 10-30 seconds
-    setInterval(addRandomActivity, Math.random() * 20000 + 10000);
+    activityIntervalId = setInterval(addRandomActivity, lowPower ? 30000 : Math.random() * 20000 + 10000);
 }
 
 // Update server metrics with realistic changes
@@ -596,8 +635,9 @@ function toggleAutoRefresh() {
 
 // Initialize server monitoring
 function initializeServerMonitoring() {
+    if (isLowPowerClient()) return;
     // Add pulse animation for online servers
-    setInterval(() => {
+    serverPulseIntervalId = setInterval(() => {
         document.querySelectorAll('.server-status.online').forEach(status => {
             status.style.animation = 'pulse 1s ease-in-out';
             setTimeout(() => {
@@ -609,8 +649,9 @@ function initializeServerMonitoring() {
 
 // Initialize website monitoring
 function initializeWebsiteMonitoring() {
+    if (isLowPowerClient()) return;
     // Add subtle animations to website cards
-    setInterval(() => {
+    websiteAnimIntervalId = setInterval(() => {
         document.querySelectorAll('.website-card').forEach(card => {
             if (Math.random() > 0.7) {
                 card.style.transform = 'translateY(-2px)';
@@ -1417,3 +1458,12 @@ if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.
         navigator.serviceWorker.register('sw.js').catch(function() { /* ignore */ });
     });
 }
+
+document.addEventListener('visibilitychange', function() {
+    if (!document.hidden) return;
+    clearInterval(realtimeIntervalId);
+    clearInterval(websiteIntervalId);
+    clearInterval(activityIntervalId);
+    clearInterval(serverPulseIntervalId);
+    clearInterval(websiteAnimIntervalId);
+});
