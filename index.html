@@ -43,7 +43,6 @@
     
     <!-- Security Headers -->
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
-    <meta http-equiv="X-Frame-Options" content="DENY">
     <meta http-equiv="X-XSS-Protection" content="1; mode=block">
     <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
     <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(self), interest-cohort=()">
@@ -60,7 +59,6 @@
         connect-src 'self' https:;
         worker-src 'self';
         frame-src 'self' https://himmelstor.co.zw https://havenbabywear.co.zw;
-        frame-ancestors 'none';
         base-uri 'self';
         form-action 'self';
         upgrade-insecure-requests;

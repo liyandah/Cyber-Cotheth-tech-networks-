@@ -1,5 +1,5 @@
 /* CCTN static cache — bump CACHE_NAME after you change CSS/JS/HTML. */
-const CACHE_NAME = 'cctn-v1-20260413';
+const CACHE_NAME = 'cctn-v2-20260415';
 const PRECACHE_URLS = ['./', './index.html', './style.min.css', './script.min.js'];
 
 self.addEventListener('install', (event) => {
@@ -33,14 +33,19 @@ self.addEventListener('fetch', (event) => {
     if (url.origin !== self.location.origin) return;
 
     event.respondWith(
-        caches.match(req, { ignoreSearch: true }).then((cached) => {
-            if (cached) return cached;
-            return fetch(req).then((res) => {
+        fetch(req)
+            .then((res) => {
                 if (!res || res.status !== 200 || res.type !== 'basic') return res;
                 const copy = res.clone();
                 caches.open(CACHE_NAME).then((cache) => cache.put(req, copy));
                 return res;
-            });
-        })
+            })
+            .catch(() =>
+                caches.match(req, { ignoreSearch: true }).then((cached) => {
+                    if (cached) return cached;
+                    if (req.mode === 'navigate') return caches.match('./index.html');
+                    return new Response('', { status: 504, statusText: 'Gateway Timeout' });
+                })
+            )
     );
 });
