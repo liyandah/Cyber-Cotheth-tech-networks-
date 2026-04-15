@@ -2531,10 +2531,27 @@ section[id] {
     padding: 0;
     overflow: hidden;
     border-radius: 2rem;
+    width: 100%;
+    max-width: 1120px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .portfolio-enterprise .portfolio-item + .portfolio-item {
     margin-top: 28px;
+}
+
+.portfolio-enterprise .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.portfolio-enterprise .section-header {
+    width: 100%;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .portfolio-enterprise .p-info {
@@ -2869,6 +2886,8 @@ section[id] {
 
     .p-footer {
         padding: 14px 18px 18px;
+        justify-content: center;
+        text-align: center;
     }
 }
 
