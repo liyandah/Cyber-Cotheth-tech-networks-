@@ -464,11 +464,12 @@ html[data-theme="light"] .navbar .cctn-svg {
     display: flex;
     gap: 20px;
     flex-wrap: wrap;
+    margin-bottom: 16px;
 }
 
 /* Hero Social Media Icons */
 .hero-social {
-    margin-top: 40px;
+    margin-top: 22px;
     display: flex;
     justify-content: center;
 }

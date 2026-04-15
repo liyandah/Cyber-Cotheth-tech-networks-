@@ -187,6 +187,18 @@
 </head>
 <body>
     <div class="page-boot" aria-hidden="true"><span class="page-boot__word">CCTN</span></div>
+    <script>
+        (function() {
+            function removeBoot() {
+                var boot = document.querySelector('.page-boot');
+                if (boot) boot.remove();
+            }
+            document.addEventListener('DOMContentLoaded', function() {
+                setTimeout(removeBoot, 1200);
+            });
+            window.addEventListener('pageshow', removeBoot);
+        })();
+    </script>
     <header class="site-header">
     <div class="top-bar status-bar" role="region" aria-label="Status">
         <div class="status-container">
@@ -241,24 +253,15 @@
         <div class="hero-carousel">
             <div class="carousel-container">
                 <div class="carousel-slide active">
-                    <picture>
-                        <source type="image/webp" srcset="img/premium_photo-1661882403999-46081e67c401.webp">
-                        <img src="img/premium_photo-1661882403999-46081e67c401.jpeg" alt="CCTN AI-Powered Web Development Platform - Modern Technology Solutions for Zimbabwe Businesses" width="1920" height="1080" decoding="async" fetchpriority="high" loading="eager" />
-                    </picture>
+                    <img src="img/premium_photo-1661882403999-46081e67c401.jpeg" alt="CCTN AI-Powered Web Development Platform - Modern Technology Solutions for Zimbabwe Businesses" width="1920" height="1080" decoding="async" fetchpriority="high" loading="eager" />
                     <div class="carousel-overlay"></div>
                 </div>
                 <div class="carousel-slide">
-                    <picture>
-                        <source type="image/webp" srcset="img/information-systems-computers.webp">
-                        <img src="img/information-systems-computers.jpg" alt="Professional Information Systems and Computer Technology Services in Zimbabwe" width="1920" height="1080" decoding="async" loading="lazy" />
-                    </picture>
+                    <img src="img/information-systems-computers.jpg" alt="Professional Information Systems and Computer Technology Services in Zimbabwe" width="1920" height="1080" decoding="async" loading="lazy" />
                     <div class="carousel-overlay"></div>
                 </div>
                 <div class="carousel-slide">
-                    <picture>
-                        <source type="image/webp" srcset="img/tech_52.webp">
-                        <img src="img/tech_52.png" alt="CCTN Technology Solutions - Cloud Development Suite for Zimbabwe Companies" width="800" height="800" decoding="async" loading="lazy" />
-                    </picture>
+                    <img src="img/tech_52.png" alt="CCTN Technology Solutions - Cloud Development Suite for Zimbabwe Companies" width="800" height="800" decoding="async" loading="lazy" />
                     <div class="carousel-overlay"></div>
                 </div>
             </div>

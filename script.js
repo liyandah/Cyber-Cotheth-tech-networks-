@@ -1453,11 +1453,8 @@ function showSlide(slideIndex) {
     }
 }
 
-if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
-    window.addEventListener('load', function() {
-        navigator.serviceWorker.register('sw.js').catch(function() { /* ignore */ });
-    });
-}
+// Service worker registration is intentionally disabled for now.
+// This avoids stale-cache issues while resolving mobile loading problems on GitHub Pages.
 
 document.addEventListener('visibilitychange', function() {
     if (!document.hidden) return;
