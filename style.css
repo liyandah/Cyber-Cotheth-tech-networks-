@@ -2530,6 +2530,7 @@ section[id] {
     align-items: stretch;
     padding: 0;
     overflow: hidden;
+    border-radius: 2rem;
 }
 
 .portfolio-enterprise .portfolio-item + .portfolio-item {
@@ -2554,7 +2555,6 @@ section[id] {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    margin-top: 16px;
     color: #FF7033;
     font-weight: 600;
     text-decoration: none;
@@ -2581,6 +2581,44 @@ section[id] {
     min-height: 0;
     border: 0;
     display: block;
+}
+
+.p-preview-overlay-link {
+    position: absolute;
+    left: 14px;
+    right: 14px;
+    bottom: 14px;
+    z-index: 3;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    min-height: 56px;
+    border-radius: 999px;
+    background: #FF6B35;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 700;
+    box-shadow: 0 8px 24px rgba(255, 107, 53, 0.35);
+}
+
+.p-footer {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 16px 24px 20px;
+    background: rgba(255, 255, 255, 0.04);
+    border-top: 1px solid var(--glass-border);
+}
+
+.p-badge {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--enterprise-muted);
+    font-weight: 600;
 }
 
 .payments-bar {
@@ -2828,6 +2866,10 @@ section[id] {
     .p-preview {
         aspect-ratio: 4 / 3;
     }
+
+    .p-footer {
+        padding: 14px 18px 18px;
+    }
 }
 
 /* —— Command Center: Live Website Management —— */
@@ -3070,26 +3112,6 @@ section[id] {
     transition: width 0.4s ease;
 }
 
-/* Portfolio: mobile-friendly (skip heavy iframes) */
-.p-preview-mobile-link {
-    display: none;
-    padding: 20px 16px;
-    text-align: center;
-    font-weight: 600;
-    color: #FF7033;
-    text-decoration: none;
-    border-radius: 12px;
-    background: rgba(255, 112, 51, 0.1);
-    border: 1px solid rgba(255, 112, 51, 0.25);
-    align-items: center;
-    justify-content: center;
-    min-height: 100px;
-}
-
-.p-preview-mobile-link:hover {
-    background: rgba(255, 112, 51, 0.18);
-}
-
 @media (max-width: 768px) {
     /* MOBILE PERFORMANCE MODE (max speed) */
     .top-bar,
@@ -3176,10 +3198,8 @@ section[id] {
         display: none !important;
     }
 
-    .p-preview-mobile-link {
+    .p-preview-overlay-link {
         display: flex;
-        margin: 14px;
-        min-height: 56px;
     }
 
     .mgmt-dashboard-grid {
