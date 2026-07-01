@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login | Test bet</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="/sporting/css/admin.css">
+</head>
+<body class="admin-app">
+  <main class="admin-auth">
+    <div class="admin-card admin-card--auth">
+      <div class="admin-card__badge"><i class="fas fa-shield-halved"></i></div>
+      <h1>Test bet Admin</h1>
+      <p>Sign in to view accounts, balances, and all transactions.</p>
+
+      <div id="form-errors" class="admin-alert admin-alert--error" hidden></div>
+
+      <form id="admin-login-form" class="admin-form" novalidate>
+        <div class="admin-form__group">
+          <label for="username">Username</label>
+          <input type="text" id="username" name="username" required autocomplete="username" placeholder="Admin">
+        </div>
+        <div class="admin-form__group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" required autocomplete="current-password" placeholder="Enter admin password">
+        </div>
+        <button type="submit" class="admin-btn admin-btn--primary" id="login-btn">
+          <i class="fas fa-right-to-bracket"></i> Sign In
+        </button>
+      </form>
+
+      <a href="/sporting/" class="admin-back-link"><i class="fas fa-arrow-left"></i> Back to site</a>
+    </div>
+  </main>
+
+  <script src="/sporting/js/admin.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const { ok } = await AdminAPI.me();
+      if (ok) window.location.href = '/sporting/admin/dashboard.html';
+
+      const form = document.getElementById('admin-login-form');
+      const errorsEl = document.getElementById('form-errors');
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        AdminUI.clearAlert(errorsEl);
+
+        const btn = document.getElementById('login-btn');
+        btn.disabled = true;
+
+        const { ok, data } = await AdminAPI.login({
+          username: document.getElementById('username').value,
+          password: document.getElementById('password').value,
+        });
+
+        btn.disabled = false;
+
+        if (!ok) {
+          AdminUI.showAlert(errorsEl, data.error || 'Login failed.');
+          return;
+        }
+
+        window.location.href = data.redirect || '/sporting/admin/dashboard.html';
+      });
+    });
+  </script>
+</body>
+</html>

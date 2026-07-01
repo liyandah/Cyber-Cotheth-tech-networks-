@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register | Test bet</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="/style.min.css?v=12">
+  <link rel="stylesheet" href="/sporting/css/sporting.css">
+</head>
+<body>
+  <header class="sporting-header">
+    <div class="sporting-header__inner">
+      <a href="/sporting/" class="sporting-brand">
+        <span class="sporting-brand__title"><i class="fas fa-futbol"></i> Test bet</span>
+      </a>
+      <button type="button" class="sporting-theme-btn" id="sporting-theme-btn" aria-label="Toggle theme">
+        <i class="fas fa-moon"></i>
+      </button>
+      <button type="button" class="sporting-nav-toggle" id="sporting-nav-toggle" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="sporting-nav" id="sporting-nav-menu">
+        <a href="/">Home</a>
+        <a href="/sporting/">Sports</a>
+        <a href="/sporting/login.html">Login</a>
+        <a href="/sporting/register.html" class="active">Register</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="sporting-page">
+    <div class="sporting-container" style="max-width:520px;">
+      <section class="sporting-hero">
+        <h1>Create Account</h1>
+        <p>Step 1: Personal details &middot; Step 2: Username &amp; password</p>
+      </section>
+
+      <div class="sporting-steps-indicator">
+        <span id="step-ind-1" class="active"></span>
+        <span id="step-ind-2"></span>
+      </div>
+
+      <div class="sporting-card">
+        <div id="form-errors" class="form-errors" hidden></div>
+
+        <!-- Step 1: Personal details -->
+        <div id="step-1" class="sporting-step active">
+          <h2>Personal Details</h2>
+          <form id="personal-form" class="sporting-form" novalidate>
+            <div class="form-group">
+              <label for="firstName">First Name</label>
+              <input type="text" id="firstName" name="firstName" required autocomplete="given-name" placeholder="John">
+            </div>
+            <div class="form-group">
+              <label for="surname">Surname</label>
+              <input type="text" id="surname" name="surname" required autocomplete="family-name" placeholder="Doe">
+            </div>
+            <div class="form-group">
+              <label for="phone">Phone Number</label>
+              <input type="tel" id="phone" name="phone" required autocomplete="tel" placeholder="0771234567">
+            </div>
+            <div class="form-group">
+              <label for="nationalId">National ID Number</label>
+              <input type="text" id="nationalId" name="nationalId" required placeholder="12-345678A12">
+            </div>
+            <button type="submit" class="sporting-btn sporting-btn--primary" id="continue-btn">Continue</button>
+          </form>
+        </div>
+
+        <!-- Step 2: Account credentials -->
+        <div id="step-2" class="sporting-step">
+          <h2>Account Creation</h2>
+          <p style="margin-bottom:16px;color:var(--cctn-gray-medium);font-size:0.9rem;">
+            Choose a unique username and secure password. You'll receive a $5.00 welcome bonus.
+          </p>
+          <form id="account-form" class="sporting-form" novalidate>
+            <div class="form-group">
+              <label for="username">Username</label>
+              <input type="text" id="username" name="username" required autocomplete="username" placeholder="johndoe">
+            </div>
+            <div class="form-group">
+              <label for="password">Password</label>
+              <input type="password" id="password" name="password" required autocomplete="new-password" minlength="6">
+            </div>
+            <div class="form-group">
+              <label for="confirmPassword">Confirm Password</label>
+              <input type="password" id="confirmPassword" name="confirmPassword" required autocomplete="new-password">
+            </div>
+            <div class="sporting-actions">
+              <button type="button" class="sporting-btn sporting-btn--outline" id="back-btn">Back</button>
+              <button type="submit" class="sporting-btn sporting-btn--primary" id="create-btn">Create Account</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <p style="text-align:center;margin-top:16px;">
+        Already have an account? <a href="/sporting/login.html" style="color:var(--cctn-orange);">Sign in</a>
+      </p>
+    </div>
+  </main>
+
+  <script src="/sporting/js/api.js"></script>
+  <script src="/sporting/js/nav.js"></script>
+  <script src="/sporting/js/register.js"></script>
+</body>
+</html>

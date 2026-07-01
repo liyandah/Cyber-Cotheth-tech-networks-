@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test bet | Sports Wallet</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="/style.min.css?v=12">
+  <link rel="stylesheet" href="/sporting/css/sporting.css">
+</head>
+<body>
+  <header class="sporting-header">
+    <div class="sporting-header__inner">
+      <a href="/" class="sporting-brand">
+        <span class="sporting-brand__title"><i class="fas fa-futbol"></i> Test bet</span>
+      </a>
+      <button type="button" class="sporting-theme-btn" id="sporting-theme-btn" aria-label="Toggle theme">
+        <i class="fas fa-moon"></i>
+      </button>
+      <button type="button" class="sporting-nav-toggle" id="sporting-nav-toggle" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="sporting-nav" id="sporting-nav-menu">
+        <a href="/">Home</a>
+        <a href="/sporting/" class="active">Sports</a>
+        <a href="/sporting/login.html">Login</a>
+        <a href="/sporting/register.html">Register</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="sporting-page">
+    <div class="sporting-container">
+      <section class="sporting-hero">
+        <h1><span class="gradient-text">Test bet</span> Sports Platform</h1>
+        <p>Register, manage your wallet, and track transactions in a clean test betting experience with simulated Zimbabwe payment methods.</p>
+        <div class="sporting-actions" style="justify-content:center;">
+          <a href="/sporting/register.html" class="sporting-btn sporting-btn--primary">Get Started</a>
+          <a href="/sporting/login.html" class="sporting-btn sporting-btn--outline">Sign In</a>
+        </div>
+      </section>
+
+      <div class="sporting-grid">
+        <div class="sporting-card">
+          <h2><i class="fas fa-user-plus"></i> Register</h2>
+          <p>Create your account with personal details and a secure username. New members receive a <strong>$5.00 welcome bonus</strong>.</p>
+          <a href="/sporting/register.html" class="sporting-btn sporting-btn--primary">Register Now</a>
+        </div>
+        <div class="sporting-card">
+          <h2><i class="fas fa-wallet"></i> Wallet</h2>
+          <p>Deposit with voucher or mobile money, withdraw to your provider, and keep your test balance easy to follow.</p>
+          <a href="/sporting/wallet.html" class="sporting-btn sporting-btn--outline">Open Wallet</a>
+        </div>
+        <div class="sporting-card">
+          <h2><i class="fas fa-chart-line"></i> Dashboard</h2>
+          <p>View your balance, account status, and profile details after signing in.</p>
+          <a href="/sporting/dashboard.html" class="sporting-btn sporting-btn--outline">Dashboard</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="/sporting/js/api.js"></script>
+  <script src="/sporting/js/nav.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const { ok } = await SportingAPI.getUser();
+      if (ok) window.location.href = '/sporting/dashboard.html';
+    });
+  </script>
+</body>
+</html>

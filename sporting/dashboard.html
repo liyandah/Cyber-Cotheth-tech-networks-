@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard | Test bet</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="/style.min.css?v=12">
+  <link rel="stylesheet" href="/sporting/css/sporting.css">
+</head>
+<body>
+  <header class="sporting-header">
+    <div class="sporting-header__inner">
+      <a href="/sporting/" class="sporting-brand">
+        <span class="sporting-brand__title"><i class="fas fa-futbol"></i> Test bet</span>
+      </a>
+      <button type="button" class="sporting-theme-btn" id="sporting-theme-btn" aria-label="Toggle theme">
+        <i class="fas fa-moon"></i>
+      </button>
+      <button type="button" class="sporting-nav-toggle" id="sporting-nav-toggle" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="sporting-nav" id="sporting-nav-menu">
+        <a href="/">Home</a>
+        <a href="/sporting/">Sports</a>
+        <a href="/sporting/dashboard.html" class="active">Dashboard</a>
+        <a href="/sporting/wallet.html">Wallet</a>
+        <button type="button" class="sporting-btn sporting-btn--outline" id="logout-btn" style="padding:8px 16px;font-size:0.85rem;">Logout</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="sporting-page">
+    <div class="sporting-container">
+      <section class="sporting-hero">
+        <h1>Hello, <span id="welcome-name" class="gradient-text">...</span></h1>
+        <p>Your Test bet account overview</p>
+      </section>
+
+      <div class="sporting-card">
+        <h2>Account Summary</h2>
+        <div class="sporting-grid" id="dashboard-stats">
+          <div class="sporting-stat">
+            <div class="sporting-stat__label">Wallet Balance</div>
+            <div class="sporting-stat__value" id="stat-balance">—</div>
+          </div>
+          <div class="sporting-stat">
+            <div class="sporting-stat__label">Username</div>
+            <div class="sporting-stat__value" id="stat-username" style="font-size:1.1rem;">—</div>
+          </div>
+          <div class="sporting-stat">
+            <div class="sporting-stat__label">Phone</div>
+            <div class="sporting-stat__value" id="stat-phone" style="font-size:1rem;">—</div>
+          </div>
+          <div class="sporting-stat">
+            <div class="sporting-stat__label">Account Status</div>
+            <div class="sporting-stat__value status-active" id="stat-status" style="font-size:1rem;">—</div>
+          </div>
+        </div>
+        <div class="sporting-actions" style="margin-top:24px;">
+          <a href="/sporting/wallet.html" class="sporting-btn sporting-btn--primary">
+            <i class="fas fa-wallet"></i> Manage Wallet
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="/sporting/js/api.js"></script>
+  <script src="/sporting/js/nav.js"></script>
+  <script src="/sporting/js/dashboard.js"></script>
+</body>
+</html>

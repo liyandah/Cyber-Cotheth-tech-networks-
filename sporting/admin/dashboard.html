@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard | Test bet</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="/sporting/css/admin.css">
+</head>
+<body class="admin-app">
+  <header class="admin-header">
+    <a href="/sporting/admin/dashboard.html" class="admin-header__brand">
+      <div class="admin-header__logo"><i class="fas fa-shield-halved"></i></div>
+      <div>
+        <div class="admin-header__title">Test bet Admin</div>
+        <div class="admin-header__subtitle">Accounts &amp; transactions</div>
+      </div>
+    </a>
+    <div class="admin-header__actions">
+      <span class="admin-pill"><i class="fas fa-user-shield"></i> <span id="admin-name">Admin</span></span>
+      <button type="button" class="admin-btn admin-btn--ghost" id="logout-btn">Logout</button>
+    </div>
+  </header>
+
+  <main class="admin-main">
+    <section class="admin-stats" id="admin-stats">
+      <div class="admin-stat">
+        <div class="admin-stat__label">Total Accounts</div>
+        <div class="admin-stat__value" id="stat-users">—</div>
+      </div>
+      <div class="admin-stat">
+        <div class="admin-stat__label">Active Accounts</div>
+        <div class="admin-stat__value admin-stat__value--green" id="stat-active">—</div>
+      </div>
+      <div class="admin-stat">
+        <div class="admin-stat__label">Pending</div>
+        <div class="admin-stat__value admin-stat__value--amber" id="stat-pending">—</div>
+      </div>
+      <div class="admin-stat">
+        <div class="admin-stat__label">Transactions</div>
+        <div class="admin-stat__value" id="stat-transactions">—</div>
+      </div>
+      <div class="admin-stat">
+        <div class="admin-stat__label">Successful</div>
+        <div class="admin-stat__value admin-stat__value--green" id="stat-completed">—</div>
+      </div>
+      <div class="admin-stat">
+        <div class="admin-stat__label">Failed</div>
+        <div class="admin-stat__value admin-stat__value--red" id="stat-failed">—</div>
+      </div>
+    </section>
+
+    <section class="admin-panel">
+      <div class="admin-panel__head">
+        <h2><i class="fas fa-users"></i> All Accounts</h2>
+        <input type="search" id="user-search" class="admin-search" placeholder="Search name, phone, username, ID…">
+      </div>
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Username</th>
+              <th>Phone</th>
+              <th>National ID</th>
+              <th>Balance</th>
+              <th>Status</th>
+              <th>Created</th>
+            </tr>
+          </thead>
+          <tbody id="users-body">
+            <tr><td colspan="8" class="admin-empty">Loading accounts…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="admin-panel">
+      <div class="admin-panel__head">
+        <h2><i class="fas fa-receipt"></i> All Transactions</h2>
+        <div class="admin-filters">
+          <button type="button" class="admin-filter active" data-status="all">All</button>
+          <button type="button" class="admin-filter" data-status="completed">Successful</button>
+          <button type="button" class="admin-filter" data-status="failed">Failed</button>
+        </div>
+      </div>
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>User</th>
+              <th>Type</th>
+              <th>Provider</th>
+              <th>Phone</th>
+              <th>Amount</th>
+              <th>Status</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody id="transactions-body">
+            <tr><td colspan="8" class="admin-empty">Loading transactions…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script src="/sporting/js/admin.js"></script>
+  <script src="/sporting/js/admin-dashboard.js"></script>
+</body>
+</html>

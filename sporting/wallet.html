@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wallet | Test bet</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="/sporting/css/wallet.css">
+</head>
+<body class="wallet-app">
+  <header class="tb-header">
+    <a href="/sporting/" class="tb-header__brand">
+      <div class="tb-header__logo"><i class="fas fa-futbol"></i></div>
+      <div class="tb-header__name">Test <span>bet</span></div>
+    </a>
+    <div class="tb-header__actions">
+      <a href="/sporting/dashboard.html" class="tb-nav-link">Dashboard</a>
+      <span class="tb-balance-pill" id="header-balance">$0.00</span>
+      <span class="tb-wallet-btn"><i class="fas fa-wallet"></i> Wallet</span>
+      <button type="button" class="tb-logout-btn" id="logout-btn">Logout</button>
+    </div>
+  </header>
+
+  <main class="wallet-main">
+    <div class="wallet-modal" role="dialog" aria-labelledby="wallet-title">
+      <div class="wallet-modal__head">
+        <button type="button" class="wallet-modal__close" id="wallet-close" aria-label="Close" title="Back to dashboard">
+          <i class="fas fa-times"></i>
+        </button>
+        <div class="wallet-modal__title-row">
+          <div class="wallet-modal__icon"><i class="fas fa-wallet"></i></div>
+          <div>
+            <h1 class="wallet-modal__title" id="wallet-title">Wallet</h1>
+            <p class="wallet-modal__subtitle">Manage your account balance and withdraw funds</p>
+          </div>
+        </div>
+
+        <nav class="wallet-tabs" role="tablist">
+          <button type="button" class="wallet-tab active" data-panel="overview" role="tab">Overview</button>
+          <button type="button" class="wallet-tab" data-panel="deposit" role="tab">Deposit</button>
+          <button type="button" class="wallet-tab" data-panel="withdraw" role="tab">Withdraw</button>
+        </nav>
+      </div>
+
+      <div class="wallet-modal__body">
+        <div id="wallet-alert" class="w-alert" hidden></div>
+
+        <!-- Overview -->
+        <div id="panel-overview" class="wallet-panel active" role="tabpanel">
+          <div class="w-balance-card">
+            <div class="w-balance-card__label">Total Balance</div>
+            <div class="w-balance-card__amount">
+              <span class="w-balance-card__dollar">$</span>
+              <span id="wallet-balance">0.00</span>
+            </div>
+          </div>
+
+          <div class="w-quick-actions">
+            <button type="button" class="w-quick-btn" data-goto="deposit">
+              <i class="fas fa-arrow-down"></i> Deposit
+            </button>
+            <button type="button" class="w-quick-btn" data-goto="withdraw">
+              <i class="fas fa-arrow-up"></i> Withdraw
+            </button>
+            <button type="button" class="w-quick-btn" data-goto="history">
+              <i class="fas fa-clock-rotate-left"></i> History
+            </button>
+          </div>
+
+          <div class="w-breakdown">
+            <div class="w-breakdown__row">
+              <div class="w-breakdown__left">
+                <i class="fas fa-coins"></i>
+                <span>Deposit</span>
+              </div>
+              <span class="w-breakdown__value" id="stat-deposits">$0.00</span>
+            </div>
+            <div class="w-breakdown__row w-breakdown__row--win">
+              <div class="w-breakdown__left">
+                <i class="fas fa-chart-line"></i>
+                <span>Win</span>
+              </div>
+              <span class="w-breakdown__value" id="stat-wins">$0.00</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Deposit -->
+        <div id="panel-deposit" class="wallet-panel" role="tabpanel">
+          <div id="deposit-step-methods" class="w-form-step active">
+            <h2 class="w-section-title">Choose payment method</h2>
+            <div class="w-section-sub"><i class="fas fa-mobile-screen"></i> Mobile Money</div>
+            <div class="w-pay-list" id="deposit-methods"></div>
+            <div class="w-modal-footer">
+              <button type="button" class="w-btn-cancel" data-cancel="deposit">Cancel</button>
+              <button type="button" class="w-btn-next" id="deposit-next" disabled>Next <i class="fas fa-arrow-right"></i></button>
+            </div>
+          </div>
+          <div id="deposit-step-form" class="w-form-step">
+            <div class="w-selected-method" id="deposit-selected-label"></div>
+            <form id="deposit-form" class="sporting-form" novalidate>
+              <div class="w-form-group">
+                <label for="deposit-phone">Phone Number</label>
+                <input type="tel" id="deposit-phone" name="phone" required placeholder="0771234567">
+              </div>
+              <div class="w-form-group">
+                <label for="deposit-amount">Amount ($)</label>
+                <input type="number" id="deposit-amount" name="amount" required min="0.01" step="0.01" placeholder="10.00">
+              </div>
+              <div class="w-modal-footer">
+                <button type="button" class="w-btn-cancel" id="deposit-back">Back</button>
+                <button type="submit" class="w-btn-next w-btn-submit">Deposit <i class="fas fa-check"></i></button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Withdraw -->
+        <div id="panel-withdraw" class="wallet-panel" role="tabpanel">
+          <div id="withdraw-step-methods" class="w-form-step active">
+            <div class="w-summary-box">
+              <div class="w-summary-row">
+                <span>Available Balance:</span>
+                <strong id="withdraw-available">$0.00</strong>
+              </div>
+              <div class="w-summary-row">
+                <span>Maximum Withdrawal:</span>
+                <span class="w-green" id="withdraw-max">$0.00</span>
+              </div>
+            </div>
+            <h2 class="w-section-title">Choose payment method</h2>
+            <div class="w-section-sub"><i class="fas fa-mobile-screen"></i> Mobile Money</div>
+            <div class="w-pay-list" id="withdraw-methods"></div>
+            <div class="w-modal-footer">
+              <button type="button" class="w-btn-cancel" data-cancel="withdraw">Cancel</button>
+              <button type="button" class="w-btn-next" id="withdraw-next" disabled>Next <i class="fas fa-arrow-right"></i></button>
+            </div>
+          </div>
+          <div id="withdraw-step-form" class="w-form-step">
+            <div class="w-selected-method" id="withdraw-selected-label"></div>
+            <form id="withdraw-form" novalidate>
+              <div class="w-form-group">
+                <label for="withdraw-phone">Phone Number</label>
+                <input type="tel" id="withdraw-phone" name="phone" required placeholder="0771234567">
+              </div>
+              <div class="w-form-group">
+                <label for="withdraw-amount">Amount ($)</label>
+                <input type="number" id="withdraw-amount" name="amount" required min="0.01" step="0.01" placeholder="5.00">
+              </div>
+              <div class="w-modal-footer">
+                <button type="button" class="w-btn-cancel" id="withdraw-back">Back</button>
+                <button type="submit" class="w-btn-next w-btn-submit">Withdraw <i class="fas fa-check"></i></button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- History (shown from Overview quick action) -->
+        <div id="panel-history" class="wallet-panel" role="tabpanel">
+          <h2 class="w-section-title">Transaction History</h2>
+          <div class="w-history-table-wrap">
+            <table class="w-history-table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Type</th>
+                  <th>Provider</th>
+                  <th>Phone</th>
+                  <th>Amount</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="transactions-body">
+                <tr><td colspan="6" class="w-empty">Loading…</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="w-modal-footer" style="margin-top:16px;">
+            <button type="button" class="w-btn-cancel" data-goto-tab="overview">Back to Overview</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="/sporting/js/api.js"></script>
+  <script src="/sporting/js/wallet.js"></script>
+</body>
+</html>
