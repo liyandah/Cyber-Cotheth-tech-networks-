@@ -85,6 +85,20 @@ function validateWalletTransaction({ provider, phone, amount }) {
   } else {
     data.phone = data.phone.replace(/\s/g, '');
   }
+
+  if (data.provider === 'Omari') {
+    const digits = data.phone.replace(/\D/g, '');
+    if (digits.startsWith('07') && digits.length === 10) {
+      data.phone = '263' + digits.slice(1);
+    } else if (digits.startsWith('2637') && digits.length === 12) {
+      data.phone = digits;
+    } else if (digits.startsWith('7') && digits.length === 9) {
+      data.phone = '263' + digits;
+    } else {
+      errors.push('Omari requires phone in format 2637XXXXXXXX or 07XXXXXXXX.');
+    }
+  }
+
   if (!Number.isFinite(data.amount) || data.amount <= 0) {
     errors.push('Amount must be greater than zero.');
   } else {

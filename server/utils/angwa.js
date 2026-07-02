@@ -62,6 +62,14 @@ function normalizePhoneNumber(phone) {
   return digits;
 }
 
+function assertOmariMsisdn(phone) {
+  const msisdn = normalizePhoneNumber(phone);
+  if (!/^2637\d{8}$/.test(msisdn)) {
+    throw new Error('Omari requires a phone number in format 2637XXXXXXXX (12 digits).');
+  }
+  return msisdn;
+}
+
 function providerToGatewayConfig(provider) {
   const config = PROVIDER_CONFIG[provider];
   if (!config) {
@@ -112,7 +120,12 @@ async function requestGateway(method, path, body) {
   }
 
   if (!response.ok) {
-    const message = data.message || data.error || `Gateway request failed (${response.status}).`;
+    const detail = Array.isArray(data.details) ? data.details.join(' ') : '';
+    const message =
+      data.message ||
+      data.error ||
+      detail ||
+      `Gateway request failed (${response.status}).`;
     const error = new Error(message);
     error.status = response.status;
     error.data = data;
@@ -126,9 +139,24 @@ function createMerchantReference(prefix) {
   return `${prefix}-${Date.now()}-${crypto.randomBytes(4).toString('hex')}`;
 }
 
+async function createOmariDeposit({ amount, phone }) {
+  const msisdn = assertOmariMsisdn(phone);
+  const body = {
+    amount,
+    currency: 'USD',
+    customerMsisdn: msisdn,
+    msisdn,
+  };
+
+  return requestGateway('POST', '/api/v1/payments/omari/deposits', body);
+}
+
 async function createDeposit({ provider, amount, phone }) {
   if (provider === 'Voucher') {
     throw new Error('Voucher deposits are not supported through the live payment gateway.');
+  }
+  if (provider === 'Omari') {
+    return createOmariDeposit({ amount, phone });
   }
 
   const config = providerToGatewayConfig(provider);
@@ -175,7 +203,7 @@ async function getPaymentStatus(reference) {
 async function confirmOmariDeposit({ reference, otp, phone }) {
   const body = {
     otp: String(otp || '').trim(),
-    msisdn: normalizePhoneNumber(phone),
+    msisdn: assertOmariMsisdn(phone),
   };
   return requestGateway(
     'POST',
