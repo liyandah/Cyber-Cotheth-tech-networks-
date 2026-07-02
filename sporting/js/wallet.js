@@ -25,10 +25,14 @@ function providerMeta(id, withdraw = false) {
     ...base,
     range: withdraw ? '$2 - $500' : base.range,
     meta: withdraw
-      ? undefined
+      ? id === 'EcoCash'
+        ? 'Queued for Ecopay bulk payout — uses your registered name and ID.'
+        : undefined
       : id === 'Omari'
         ? 'You will receive an OTP on your phone to confirm.'
-        : 'Approve the payment on your phone when prompted.',
+        : id === 'EcoCash'
+          ? 'Approve the EcoCash prompt on your phone.'
+          : 'Approve the payment on your phone when prompted.',
   };
 }
 

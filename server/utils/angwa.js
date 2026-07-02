@@ -169,6 +169,10 @@ async function createDeposit({ provider, amount, phone }) {
     idempotencyKey: crypto.randomUUID(),
   };
 
+  if (provider === 'EcoCash') {
+    body.provider = process.env.ANGWA_ECOCASH_DEPOSIT_PROVIDER || 'ECOCASH_DIRECT';
+  }
+
   return requestGateway('POST', '/api/v1/payments/deposits', body);
 }
 
@@ -184,11 +188,17 @@ async function createWithdrawal({ provider, amount, phone, user }) {
   };
 
   if (provider === 'EcoCash') {
-    const ecocashProvider =
-      process.env.ANGWA_ECOCASH_WITHDRAW_PROVIDER || 'PAYPULSE_ECOCASH';
+    // MERCHANT_AND_ECOPAY companies: withdrawals → ECOPAY bulk (default).
+    // PayPulse-only companies: set ANGWA_ECOCASH_WITHDRAW_PROVIDER=PAYPULSE_ECOCASH
+    const ecocashProvider = process.env.ANGWA_ECOCASH_WITHDRAW_PROVIDER || 'ECOPAY';
     body.provider = ecocashProvider;
 
     if (ecocashProvider === 'ECOPAY') {
+      if (!user.firstName || !user.surname || !user.nationalId) {
+        throw new Error(
+          'EcoCash withdrawal requires your registered first name, surname, and national ID.'
+        );
+      }
       body.recipientFirstName = user.firstName;
       body.recipientLastName = user.surname;
       body.recipientIdNumber = user.nationalId;
