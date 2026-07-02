@@ -65,6 +65,10 @@ const API = {
     return this.request('/api/payment/confirm', { method: 'POST', body: { reference } });
   },
 
+  confirmOmariDeposit(body) {
+    return this.request('/api/payment/omari/confirm', { method: 'POST', body });
+  },
+
   getTransactions() {
     return this.request('/api/transactions');
   },

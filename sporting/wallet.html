@@ -116,6 +116,22 @@
               </div>
             </form>
           </div>
+          <div id="deposit-step-otp" class="w-form-step">
+            <div class="w-selected-method" id="deposit-otp-label"></div>
+            <p style="margin-bottom:16px;color:var(--cctn-gray-medium);font-size:0.9rem;">
+              Enter the OTP sent to your Omari phone to complete the deposit.
+            </p>
+            <form id="deposit-otp-form" class="sporting-form" novalidate>
+              <div class="w-form-group">
+                <label for="deposit-otp">OTP Code</label>
+                <input type="text" id="deposit-otp" name="otp" required inputmode="numeric" autocomplete="one-time-code" placeholder="123456" maxlength="8">
+              </div>
+              <div class="w-modal-footer">
+                <button type="button" class="w-btn-cancel" id="deposit-otp-back">Back</button>
+                <button type="submit" class="w-btn-next w-btn-submit">Confirm OTP <i class="fas fa-check"></i></button>
+              </div>
+            </form>
+          </div>
         </div>
 
         <!-- Withdraw -->

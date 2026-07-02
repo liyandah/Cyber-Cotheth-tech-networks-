@@ -13,7 +13,7 @@ const PROVIDER_CONFIG = {
 const POLL_INTERVAL_MS = 4000;
 const MAX_POLL_ATTEMPTS = 15;
 
-const LIVE_DEPOSIT_PROVIDERS = ['EcoCash', 'InnBucks', 'OneMoney'];
+const LIVE_DEPOSIT_PROVIDERS = ['EcoCash', 'Omari', 'InnBucks', 'OneMoney'];
 const LIVE_WITHDRAWAL_PROVIDERS = ['EcoCash', 'Omari', 'InnBucks', 'OneMoney'];
 
 function isConfigured() {
@@ -130,9 +130,6 @@ async function createDeposit({ provider, amount, phone }) {
   if (provider === 'Voucher') {
     throw new Error('Voucher deposits are not supported through the live payment gateway.');
   }
-  if (provider === 'Omari') {
-    throw new Error('Omari deposits need OTP confirmation and are not enabled in this wallet flow yet.');
-  }
 
   const config = providerToGatewayConfig(provider);
   const body = {
@@ -175,6 +172,18 @@ async function getPaymentStatus(reference) {
   return requestGateway('GET', `/api/v1/payments/${encodeURIComponent(reference)}/status`, '');
 }
 
+async function confirmOmariDeposit({ reference, otp, phone }) {
+  const body = {
+    otp: String(otp || '').trim(),
+    msisdn: normalizePhoneNumber(phone),
+  };
+  return requestGateway(
+    'POST',
+    `/api/v1/payments/${encodeURIComponent(reference)}/omari/confirm`,
+    body
+  );
+}
+
 async function waitForFinalStatus(reference) {
   let lastStatus = null;
 
@@ -193,6 +202,7 @@ module.exports = {
   createDeposit,
   createWithdrawal,
   getPaymentStatus,
+  confirmOmariDeposit,
   normalizePhoneNumber,
   waitForFinalStatus,
   isConfigured,

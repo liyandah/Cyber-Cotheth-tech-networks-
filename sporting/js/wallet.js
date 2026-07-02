@@ -16,6 +16,7 @@ let currentBalance = 0;
 let selectedDepositProvider = '';
 let selectedWithdrawProvider = '';
 let livePaymentsEnabled = false;
+let pendingOmariDeposit = null;
 
 function providerMeta(id, withdraw = false) {
   const base = PROVIDER_CATALOG[id] || { logoClass: 'ecocash', label: id, range: '$1 - $500' };
@@ -23,7 +24,11 @@ function providerMeta(id, withdraw = false) {
     id,
     ...base,
     range: withdraw ? '$2 - $500' : base.range,
-    meta: withdraw ? undefined : 'Approve the payment on your phone when prompted.',
+    meta: withdraw
+      ? undefined
+      : id === 'Omari'
+        ? 'You will receive an OTP on your phone to confirm.'
+        : 'Approve the payment on your phone when prompted.',
   };
 }
 
@@ -81,11 +86,22 @@ function switchTab(panelName) {
 
 function resetDepositFlow() {
   selectedDepositProvider = '';
+  pendingOmariDeposit = null;
   document.getElementById('deposit-step-methods').classList.add('active');
   document.getElementById('deposit-step-form').classList.remove('active');
+  document.getElementById('deposit-step-otp').classList.remove('active');
   document.getElementById('deposit-next').disabled = true;
   document.querySelectorAll('#deposit-methods .w-pay-card').forEach((c) => c.classList.remove('selected'));
   document.getElementById('deposit-form').reset();
+  document.getElementById('deposit-otp-form')?.reset();
+}
+
+function showDepositOtpStep(reference, phone) {
+  pendingOmariDeposit = { reference, phone };
+  document.getElementById('deposit-otp-label').innerHTML =
+    '<i class="fas fa-mobile-screen"></i> Omari deposit — enter OTP';
+  document.getElementById('deposit-step-form').classList.remove('active');
+  document.getElementById('deposit-step-otp').classList.add('active');
 }
 
 function resetWithdrawFlow() {
@@ -308,6 +324,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('deposit-step-methods').classList.add('active');
   });
 
+  document.getElementById('deposit-otp-back')?.addEventListener('click', () => {
+    document.getElementById('deposit-step-otp').classList.remove('active');
+    document.getElementById('deposit-step-form').classList.add('active');
+  });
+
   document.getElementById('withdraw-back')?.addEventListener('click', () => {
     document.getElementById('withdraw-step-form').classList.remove('active');
     document.getElementById('withdraw-step-methods').classList.add('active');
@@ -347,6 +368,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     if (data.processing && data.reference) {
+      if (data.requiresOtp) {
+        btn.disabled = false;
+        showAlert(data.message || 'Enter the OTP sent to your phone.', 'success');
+        showDepositOtpStep(data.reference, document.getElementById('deposit-phone').value);
+        return;
+      }
+
       showAlert(data.message || 'Approve the payment on your phone…', 'success');
       const result = await waitForPaymentConfirmation(data.reference, (message) => {
         showAlert(message, 'success');
@@ -375,6 +403,51 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     btn.disabled = false;
     showAlert(data.message, 'success');
+    await refreshWallet();
+  });
+
+  document.getElementById('deposit-otp-form')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    hideAlert();
+
+    if (!pendingOmariDeposit?.reference) {
+      showAlert('Deposit session expired. Please start again.', 'error');
+      resetDepositFlow();
+      return;
+    }
+
+    const btn = e.target.querySelector('button[type="submit"]');
+    btn.disabled = true;
+
+    const { ok, data } = await SportingAPI.confirmOmariDeposit({
+      reference: pendingOmariDeposit.reference,
+      otp: document.getElementById('deposit-otp').value,
+      phone: pendingOmariDeposit.phone,
+    });
+
+    if (!ok) {
+      btn.disabled = false;
+      showAlert(data.error || 'OTP confirmation failed.', 'error');
+      return;
+    }
+
+    showAlert(data.message || 'OTP accepted. Waiting for confirmation…', 'success');
+    const result = await waitForPaymentConfirmation(pendingOmariDeposit.reference, (message) => {
+      showAlert(message, 'success');
+    });
+    btn.disabled = false;
+
+    if (!result.ok) {
+      showAlert(result.data.error || 'Deposit failed.', 'error');
+      return;
+    }
+
+    showAlert(result.data.message, 'success');
+    resetDepositFlow();
+    switchTab('overview');
+    document.querySelectorAll('.wallet-tab').forEach((t) => {
+      t.classList.toggle('active', t.dataset.panel === 'overview');
+    });
     await refreshWallet();
   });
 
