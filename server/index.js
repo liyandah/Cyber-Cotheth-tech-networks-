@@ -1,6 +1,8 @@
 /**
  * CCTN Express server — serves static site and Sporting API.
  */
+require('dotenv').config();
+
 const fs = require('fs');
 const path = require('path');
 const express = require('express');
@@ -11,10 +13,12 @@ require('./db');
 const authRoutes = require('./routes/auth');
 const walletRoutes = require('./routes/wallet');
 const adminRoutes = require('./routes/admin');
+const { isConfigured: angwaConfigured } = require('./utils/angwa');
 
 const app = express();
 const PORT = process.env.PORT || 8000;
-const HOST = process.env.HOST || '127.0.0.1';
+// Render and other hosts inject PORT — bind all interfaces so traffic reaches the app.
+const HOST = process.env.HOST || (process.env.PORT ? '0.0.0.0' : '127.0.0.1');
 const ROOT = path.resolve(__dirname, '..');
 const MAIN_INDEX = path.join(ROOT, 'index.html');
 const SPORTING_INDEX = path.join(ROOT, 'sporting', 'index.html');
@@ -58,10 +62,19 @@ app.use('/api', walletRoutes);
 app.use('/api', adminRoutes);
 
 app.get('/healthz', (req, res) => {
+  const dbPath = path.join(ROOT, 'data', 'cctn.db');
   res.json({
     success: true,
     cwd: process.cwd(),
     root: ROOT,
+    dbPath,
+    dbExists: fs.existsSync(dbPath),
+    gatewayConfigured: Boolean(
+      process.env.ANGWA_BASE_URL &&
+      process.env.ANGWA_API_KEY &&
+      process.env.ANGWA_API_SECRET &&
+      process.env.ANGWA_MERCHANT_DOMAIN
+    ),
     files: {
       mainIndex: fs.existsSync(MAIN_INDEX),
       sportingIndex: fs.existsSync(SPORTING_INDEX),
@@ -114,4 +127,5 @@ app.listen(PORT, HOST, () => {
   console.log('Main index exists:', fs.existsSync(MAIN_INDEX));
   console.log('Sporting index exists:', fs.existsSync(SPORTING_INDEX));
   console.log('Admin login exists:', fs.existsSync(ADMIN_LOGIN));
+  console.log('Angwa Pay live payments:', angwaConfigured() ? 'enabled' : 'not configured');
 });

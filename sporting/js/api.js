@@ -61,6 +61,10 @@ const API = {
     return this.request('/api/withdraw', { method: 'POST', body });
   },
 
+  confirmPayment(reference) {
+    return this.request('/api/payment/confirm', { method: 'POST', body: { reference } });
+  },
+
   getTransactions() {
     return this.request('/api/transactions');
   },

@@ -73,10 +73,17 @@ router.post('/admin/login', async (req, res) => {
     delete req.session.userId;
     delete req.session.pendingUserId;
 
-    res.json({
-      success: true,
-      message: 'Admin login successful.',
-      redirect: '/sporting/admin/dashboard.html',
+    req.session.save((sessionErr) => {
+      if (sessionErr) {
+        console.error('Admin login session save error:', sessionErr);
+        return res.status(500).json({ success: false, error: 'Admin login session failed. Please try again.' });
+      }
+
+      res.json({
+        success: true,
+        message: 'Admin login successful.',
+        redirect: '/sporting/admin/dashboard.html',
+      });
     });
   } catch (err) {
     console.error('Admin login error:', err);

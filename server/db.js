@@ -48,6 +48,27 @@ db.exec(`
   );
 
   CREATE INDEX IF NOT EXISTS idx_transactions_user ON transactions(userId, createdAt DESC);
+
+  CREATE TABLE IF NOT EXISTS pending_payments (
+    reference TEXT PRIMARY KEY,
+    userId INTEGER NOT NULL,
+    type TEXT NOT NULL CHECK (type IN ('deposit', 'withdrawal')),
+    provider TEXT NOT NULL,
+    phone TEXT NOT NULL,
+    amount REAL NOT NULL,
+    createdAt TEXT NOT NULL DEFAULT (datetime('now')),
+    FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
+  );
+`);
+
+const txColumns = db.prepare('PRAGMA table_info(transactions)').all();
+if (!txColumns.some((col) => col.name === 'gatewayReference')) {
+  db.exec('ALTER TABLE transactions ADD COLUMN gatewayReference TEXT');
+}
+db.exec(`
+  CREATE UNIQUE INDEX IF NOT EXISTS idx_transactions_gateway_ref
+  ON transactions(gatewayReference)
+  WHERE gatewayReference IS NOT NULL;
 `);
 
 module.exports = db;

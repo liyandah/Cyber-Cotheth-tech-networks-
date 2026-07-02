@@ -117,6 +117,7 @@ router.post('/create-account', async (req, res) => {
       );
     });
     delete req.session.pendingUserId;
+    req.session.userId = userId;
     req.session.save((sessionErr) => {
       if (sessionErr) {
         console.error('Create account session save error:', sessionErr);
@@ -125,8 +126,8 @@ router.post('/create-account', async (req, res) => {
 
       res.json({
         success: true,
-        message: 'Account created successfully. Please log in.',
-        redirect: '/sporting/login.html',
+        message: 'Account created successfully.',
+        redirect: '/sporting/dashboard.html',
       });
     });
   } catch (err) {

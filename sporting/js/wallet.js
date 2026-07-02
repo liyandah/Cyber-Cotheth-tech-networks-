@@ -1,35 +1,33 @@
 /**
- * Test bet Wallet — overview, deposit, withdraw, history (simulated payments).
+ * Test bet Wallet — live deposits and withdrawals via Angwa Pay.
  */
 
-const PAYMENT_METHODS = [
-  {
-    id: 'Voucher',
-    logoClass: 'voucher',
-    label: 'Voucher',
-    range: '$1 - $100',
-    meta: 'Buy a Test bet voucher and top up your wallet with the code.',
-  },
-  { id: 'InnBucks', logoClass: 'innbucks', label: 'InnBucks', range: '$1 - $500' },
-  { id: 'Omari', logoClass: 'omari', label: 'Omari', range: '$1 - $500' },
-  { id: 'EcoCash', logoClass: 'ecocash', label: 'EcoCash', range: '$1 - $500' },
-  { id: 'OneMoney', logoClass: 'onemoney', label: 'OneMoney', range: '$1 - $500' },
-];
+const PROVIDER_CATALOG = {
+  EcoCash: { logoClass: 'ecocash', label: 'EcoCash', range: '$1 - $500' },
+  InnBucks: { logoClass: 'innbucks', label: 'InnBucks', range: '$1 - $500' },
+  OneMoney: { logoClass: 'onemoney', label: 'OneMoney', range: '$1 - $500' },
+  Omari: { logoClass: 'omari', label: 'Omari', range: '$1 - $500' },
+};
 
-const WITHDRAW_METHODS = PAYMENT_METHODS
-  .filter((method) => method.id !== 'Voucher')
-  .map((method) => ({ ...method, range: '$2 - $500' }));
-
-const PROVIDER_NAMES = new Set(PAYMENT_METHODS.map((m) => m.id));
+const POLL_INTERVAL_MS = 4000;
+const MAX_POLL_ATTEMPTS = 20;
 
 let currentBalance = 0;
 let selectedDepositProvider = '';
 let selectedWithdrawProvider = '';
+let livePaymentsEnabled = false;
+
+function providerMeta(id, withdraw = false) {
+  const base = PROVIDER_CATALOG[id] || { logoClass: 'ecocash', label: id, range: '$1 - $500' };
+  return {
+    id,
+    ...base,
+    range: withdraw ? '$2 - $500' : base.range,
+    meta: withdraw ? undefined : 'Approve the payment on your phone when prompted.',
+  };
+}
 
 function renderProviderLogo(method) {
-  if (method.logoClass === 'voucher') {
-    return '<div class="w-pay-card__logo w-pay-card__logo--voucher"><i class="fas fa-ticket"></i></div>';
-  }
   if (method.logoClass === 'innbucks') {
     return '<div class="w-pay-card__logo w-pay-card__logo--innbucks"><span></span><span></span><span></span><span></span></div>';
   }
@@ -52,7 +50,7 @@ function buildMethodCard(method, group) {
     ${renderProviderLogo(method)}
     <div class="w-pay-card__info">
       <span class="w-pay-card__name">${method.label}</span>
-      <span class="w-pay-card__meta">${method.meta || method.range + ' · Processing time varies'}</span>
+      <span class="w-pay-card__meta">${method.meta || method.range + ' · Live gateway'}</span>
     </div>
     <span class="w-pay-card__range">${method.range}</span>
     <span class="w-pay-card__badge">ZW</span>
@@ -113,10 +111,11 @@ function updateBalanceUI(balance) {
 function computeBreakdown(transactions, balance) {
   let depositTotal = 0;
   let winTotal = 0;
+  const providerNames = new Set(Object.keys(PROVIDER_CATALOG).concat(['Welcome Bonus']));
 
   transactions.forEach((tx) => {
     if (tx.type === 'deposit') {
-      if (PROVIDER_NAMES.has(tx.provider)) {
+      if (providerNames.has(tx.provider)) {
         depositTotal += tx.amount;
       } else {
         winTotal += tx.amount;
@@ -161,6 +160,53 @@ function renderTransactions(transactions) {
     .join('');
 }
 
+function renderProviderLists(depositProviders, withdrawProviders) {
+  const depositList = document.getElementById('deposit-methods');
+  const withdrawList = document.getElementById('withdraw-methods');
+  depositList.innerHTML = '';
+  withdrawList.innerHTML = '';
+
+  if (!livePaymentsEnabled) {
+    depositList.innerHTML = '<p class="w-empty">Live payments are not configured on this server.</p>';
+    withdrawList.innerHTML = '<p class="w-empty">Live payments are not configured on this server.</p>';
+    return;
+  }
+
+  depositProviders.forEach((id) => {
+    depositList.appendChild(buildMethodCard(providerMeta(id), 'deposit'));
+  });
+  withdrawProviders.forEach((id) => {
+    withdrawList.appendChild(buildMethodCard(providerMeta(id, true), 'withdraw'));
+  });
+}
+
+async function waitForPaymentConfirmation(reference, onProgress) {
+  for (let attempt = 0; attempt < MAX_POLL_ATTEMPTS; attempt += 1) {
+    const { ok, data } = await SportingAPI.confirmPayment(reference);
+
+    if (!ok) {
+      return { ok: false, data };
+    }
+
+    if (data.completed) {
+      return { ok: true, data };
+    }
+
+    if (onProgress && data.message) {
+      onProgress(data.message);
+    }
+
+    await new Promise((resolve) => setTimeout(resolve, POLL_INTERVAL_MS));
+  }
+
+  return {
+    ok: false,
+    data: {
+      error: 'Payment is still processing. Check your transaction history in a few minutes.',
+    },
+  };
+}
+
 async function refreshWallet() {
   const [walletRes, txRes] = await Promise.all([
     SportingAPI.getWallet(),
@@ -168,7 +214,12 @@ async function refreshWallet() {
   ]);
 
   if (walletRes.ok) {
+    livePaymentsEnabled = Boolean(walletRes.data.livePayments);
     updateBalanceUI(walletRes.data.balance);
+    renderProviderLists(
+      walletRes.data.depositProviders || [],
+      walletRes.data.withdrawProviders || []
+    );
   }
 
   const transactions = txRes.ok ? txRes.data.transactions : [];
@@ -181,14 +232,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   const depositList = document.getElementById('deposit-methods');
   const withdrawList = document.getElementById('withdraw-methods');
-
-  PAYMENT_METHODS.forEach((method) => {
-    depositList.appendChild(buildMethodCard(method, 'deposit'));
-  });
-
-  WITHDRAW_METHODS.forEach((method) => {
-    withdrawList.appendChild(buildMethodCard(method, 'withdraw'));
-  });
 
   document.getElementById('logout-btn')?.addEventListener('click', async () => {
     await SportingAPI.logout();
@@ -294,9 +337,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       amount: document.getElementById('deposit-amount').value,
     });
 
-    btn.disabled = false;
-
     if (!ok) {
+      btn.disabled = false;
       showAlert(
         Array.isArray(data.errors) ? data.errors.join(' ') : data.error || 'Deposit failed.',
         'error'
@@ -304,12 +346,35 @@ document.addEventListener('DOMContentLoaded', async () => {
       return;
     }
 
+    if (data.processing && data.reference) {
+      showAlert(data.message || 'Approve the payment on your phone…', 'success');
+      const result = await waitForPaymentConfirmation(data.reference, (message) => {
+        showAlert(message, 'success');
+      });
+      btn.disabled = false;
+
+      if (!result.ok) {
+        showAlert(
+          Array.isArray(result.data.errors)
+            ? result.data.errors.join(' ')
+            : result.data.error || 'Deposit failed.',
+          'error'
+        );
+        return;
+      }
+
+      showAlert(result.data.message, 'success');
+      resetDepositFlow();
+      switchTab('overview');
+      document.querySelectorAll('.wallet-tab').forEach((t) => {
+        t.classList.toggle('active', t.dataset.panel === 'overview');
+      });
+      await refreshWallet();
+      return;
+    }
+
+    btn.disabled = false;
     showAlert(data.message, 'success');
-    resetDepositFlow();
-    switchTab('overview');
-    document.querySelectorAll('.wallet-tab').forEach((t) => {
-      t.classList.toggle('active', t.dataset.panel === 'overview');
-    });
     await refreshWallet();
   });
 
@@ -326,9 +391,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       amount: document.getElementById('withdraw-amount').value,
     });
 
-    btn.disabled = false;
-
     if (!ok) {
+      btn.disabled = false;
       showAlert(
         Array.isArray(data.errors) ? data.errors.join(' ') : data.error || 'Withdrawal failed.',
         'error'
@@ -336,12 +400,35 @@ document.addEventListener('DOMContentLoaded', async () => {
       return;
     }
 
+    if (data.processing && data.reference) {
+      showAlert(data.message || 'Processing withdrawal…', 'success');
+      const result = await waitForPaymentConfirmation(data.reference, (message) => {
+        showAlert(message, 'success');
+      });
+      btn.disabled = false;
+
+      if (!result.ok) {
+        showAlert(
+          Array.isArray(result.data.errors)
+            ? result.data.errors.join(' ')
+            : result.data.error || 'Withdrawal failed.',
+          'error'
+        );
+        return;
+      }
+
+      showAlert(result.data.message, 'success');
+      resetWithdrawFlow();
+      switchTab('overview');
+      document.querySelectorAll('.wallet-tab').forEach((t) => {
+        t.classList.toggle('active', t.dataset.panel === 'overview');
+      });
+      await refreshWallet();
+      return;
+    }
+
+    btn.disabled = false;
     showAlert(data.message, 'success');
-    resetWithdrawFlow();
-    switchTab('overview');
-    document.querySelectorAll('.wallet-tab').forEach((t) => {
-      t.classList.toggle('active', t.dataset.panel === 'overview');
-    });
     await refreshWallet();
   });
 
