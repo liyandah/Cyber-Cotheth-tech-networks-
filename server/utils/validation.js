@@ -99,6 +99,17 @@ function validateWalletTransaction({ provider, phone, amount }) {
     }
   }
 
+  if (data.provider === 'EcoCash') {
+    const digits = data.phone.replace(/\D/g, '');
+    if (digits.startsWith('07') && digits.length === 10) {
+      data.phone = '263' + digits.slice(1);
+    } else if (digits.startsWith('2637') && digits.length === 12) {
+      data.phone = digits;
+    } else if (digits.startsWith('7') && digits.length === 9) {
+      data.phone = '263' + digits;
+    }
+  }
+
   if (!Number.isFinite(data.amount) || data.amount <= 0) {
     errors.push('Amount must be greater than zero.');
   } else {

@@ -184,7 +184,15 @@ async function createWithdrawal({ provider, amount, phone, user }) {
   };
 
   if (provider === 'EcoCash') {
-    body.provider = 'ECOCASH_DIRECT';
+    const ecocashProvider =
+      process.env.ANGWA_ECOCASH_WITHDRAW_PROVIDER || 'PAYPULSE_ECOCASH';
+    body.provider = ecocashProvider;
+
+    if (ecocashProvider === 'ECOPAY') {
+      body.recipientFirstName = user.firstName;
+      body.recipientLastName = user.surname;
+      body.recipientIdNumber = user.nationalId;
+    }
   }
 
   if (provider === 'OneMoney') {
