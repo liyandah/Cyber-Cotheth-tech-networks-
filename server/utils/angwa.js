@@ -140,15 +140,17 @@ function createMerchantReference(prefix) {
 }
 
 async function createOmariDeposit({ amount, phone }) {
-  const msisdn = assertOmariMsisdn(phone);
+  const phoneNumber = assertOmariMsisdn(phone);
   const body = {
     amount,
     currency: 'USD',
-    customerMsisdn: msisdn,
-    msisdn,
+    product: 'OMARI',
+    phoneNumber,
+    reference: createMerchantReference('dep'),
+    idempotencyKey: crypto.randomUUID(),
   };
 
-  return requestGateway('POST', '/api/v1/payments/omari/deposits', body);
+  return requestGateway('POST', '/api/v1/payments/deposits', body);
 }
 
 async function createDeposit({ provider, amount, phone }) {
