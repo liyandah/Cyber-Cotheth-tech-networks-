@@ -59,11 +59,17 @@ router.post('/register', (req, res) => {
     );
 
     req.session.pendingUserId = result.lastInsertRowid;
+    req.session.save((sessionErr) => {
+      if (sessionErr) {
+        console.error('Register session save error:', sessionErr);
+        return res.status(500).json({ success: false, error: 'Registration session failed. Please try again.' });
+      }
 
-    res.json({
-      success: true,
-      message: 'Personal details saved. Continue to create your account.',
-      userId: result.lastInsertRowid,
+      res.json({
+        success: true,
+        message: 'Personal details saved. Continue to create your account.',
+        userId: result.lastInsertRowid,
+      });
     });
   } catch (err) {
     console.error('Register error:', err);
@@ -111,11 +117,17 @@ router.post('/create-account', async (req, res) => {
       );
     });
     delete req.session.pendingUserId;
+    req.session.save((sessionErr) => {
+      if (sessionErr) {
+        console.error('Create account session save error:', sessionErr);
+        return res.status(500).json({ success: false, error: 'Account created, but session cleanup failed.' });
+      }
 
-    res.json({
-      success: true,
-      message: 'Account created successfully. Please log in.',
-      redirect: '/sporting/login.html',
+      res.json({
+        success: true,
+        message: 'Account created successfully. Please log in.',
+        redirect: '/sporting/login.html',
+      });
     });
   } catch (err) {
     console.error('Create account error:', err);
@@ -143,11 +155,17 @@ router.post('/login', async (req, res) => {
 
     req.session.userId = user.id;
     delete req.session.isAdmin;
+    req.session.save((sessionErr) => {
+      if (sessionErr) {
+        console.error('Login session save error:', sessionErr);
+        return res.status(500).json({ success: false, error: 'Login session failed. Please try again.' });
+      }
 
-    res.json({
-      success: true,
-      message: 'Login successful.',
-      redirect: '/sporting/dashboard.html',
+      res.json({
+        success: true,
+        message: 'Login successful.',
+        redirect: '/sporting/dashboard.html',
+      });
     });
   } catch (err) {
     console.error('Login error:', err);
@@ -161,7 +179,7 @@ router.post('/logout', (req, res) => {
     if (err) {
       return res.status(500).json({ success: false, error: 'Logout failed.' });
     }
-    res.clearCookie('connect.sid');
+    res.clearCookie('cctn.sid');
     res.json({ success: true, redirect: '/sporting/login.html' });
   });
 });

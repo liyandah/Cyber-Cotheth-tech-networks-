@@ -32,6 +32,8 @@ function sendExistingFile(res, filePath) {
   res.sendFile(filePath);
 }
 
+app.set('trust proxy', 1);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -39,6 +41,7 @@ app.use(
   session({
     name: 'cctn.sid',
     secret: process.env.SESSION_SECRET || 'cctn-sporting-test-secret-change-in-production',
+    proxy: process.env.NODE_ENV === 'production',
     resave: false,
     saveUninitialized: false,
     cookie: {
