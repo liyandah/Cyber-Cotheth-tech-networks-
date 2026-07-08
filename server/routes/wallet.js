@@ -251,6 +251,7 @@ router.post('/withdraw', requireAuth, async (req, res) => {
       provider: data.provider,
       amount: data.amount,
       phone: data.phone,
+      nationalId: data.nationalId,
       user,
     });
 

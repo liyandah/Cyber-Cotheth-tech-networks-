@@ -534,6 +534,13 @@
   border-color: #c45c1a;
 }
 
+.w-field-hint {
+  margin: 6px 0 0;
+  font-size: 0.8rem;
+  color: #9ca3af;
+  line-height: 1.4;
+}
+
 .w-selected-method {
   display: flex;
   align-items: center;

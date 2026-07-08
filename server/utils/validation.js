@@ -69,12 +69,13 @@ function validateLogin({ username, password }) {
   return { errors, data };
 }
 
-function validateWalletTransaction({ provider, phone, amount }) {
+function validateWalletTransaction({ provider, phone, amount, nationalId }) {
   const errors = [];
   const data = {
     provider: trimString(provider),
     phone: trimString(phone),
     amount: Number(amount),
+    nationalId: trimString(nationalId),
   };
 
   if (!PAYMENT_PROVIDERS.includes(data.provider)) {
@@ -107,6 +108,14 @@ function validateWalletTransaction({ provider, phone, amount }) {
       data.phone = digits;
     } else if (digits.startsWith('7') && digits.length === 9) {
       data.phone = '263' + digits;
+    }
+  }
+
+  if (data.provider === 'OneMoney') {
+    if (!data.nationalId) {
+      errors.push('National ID is required for OneMoney withdrawals.');
+    } else if (!/^[A-Za-z0-9-]{5,20}$/.test(data.nationalId)) {
+      errors.push('National ID must be 5–20 alphanumeric characters.');
     }
   }
 

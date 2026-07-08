@@ -200,6 +200,7 @@ router.get('/user', requireAuth, (req, res) => {
         surname: user.surname,
         username: user.username,
         phone: user.phone,
+        nationalId: user.nationalId,
         accountStatus: user.status,
         createdAt: user.createdAt,
       },

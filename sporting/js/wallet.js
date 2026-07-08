@@ -17,6 +17,23 @@ let selectedDepositProvider = '';
 let selectedWithdrawProvider = '';
 let livePaymentsEnabled = false;
 let pendingOmariDeposit = null;
+let registeredNationalId = '';
+
+function updateWithdrawNationalIdField() {
+  const group = document.getElementById('withdraw-national-id-group');
+  const input = document.getElementById('withdraw-national-id');
+  if (!group || !input) return;
+
+  const show = selectedWithdrawProvider === 'OneMoney';
+  group.hidden = !show;
+  input.required = show;
+  if (show && !input.value && registeredNationalId) {
+    input.value = registeredNationalId;
+  }
+  if (!show) {
+    input.value = '';
+  }
+}
 
 function providerMeta(id, withdraw = false) {
   const base = PROVIDER_CATALOG[id] || { logoClass: 'ecocash', label: id, range: '$1 - $500' };
@@ -27,7 +44,9 @@ function providerMeta(id, withdraw = false) {
     meta: withdraw
       ? id === 'EcoCash'
         ? 'Queued for Ecopay bulk payout — uses your registered name and ID.'
-        : undefined
+        : id === 'OneMoney'
+          ? 'Enter the recipient national ID on the next step.'
+          : undefined
       : id === 'Omari'
         ? 'You will receive an OTP on your phone to confirm.'
         : id === 'EcoCash'
@@ -115,6 +134,7 @@ function resetWithdrawFlow() {
   document.getElementById('withdraw-next').disabled = true;
   document.querySelectorAll('#withdraw-methods .w-pay-card').forEach((c) => c.classList.remove('selected'));
   document.getElementById('withdraw-form').reset();
+  updateWithdrawNationalIdField();
 }
 
 function updateBalanceUI(balance) {
@@ -321,6 +341,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       '<i class="fas fa-mobile-screen"></i> Withdrawing via <strong>' + selectedWithdrawProvider + '</strong>';
     document.getElementById('withdraw-step-methods').classList.remove('active');
     document.getElementById('withdraw-step-form').classList.add('active');
+    updateWithdrawNationalIdField();
   });
 
   document.getElementById('deposit-back')?.addEventListener('click', () => {
@@ -462,11 +483,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     const btn = e.target.querySelector('button[type="submit"]');
     btn.disabled = true;
 
-    const { ok, data } = await SportingAPI.withdraw({
+    const withdrawBody = {
       provider: selectedWithdrawProvider,
       phone: document.getElementById('withdraw-phone').value,
       amount: document.getElementById('withdraw-amount').value,
-    });
+    };
+    if (selectedWithdrawProvider === 'OneMoney') {
+      withdrawBody.nationalId = document.getElementById('withdraw-national-id').value;
+    }
+
+    const { ok, data } = await SportingAPI.withdraw(withdrawBody);
 
     if (!ok) {
       btn.disabled = false;
@@ -510,4 +536,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
 
   await refreshWallet();
+
+  const userRes = await SportingAPI.getUser();
+  if (userRes.ok && userRes.data.user?.nationalId) {
+    registeredNationalId = userRes.data.user.nationalId;
+  }
 });

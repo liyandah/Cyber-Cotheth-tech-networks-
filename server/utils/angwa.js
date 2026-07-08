@@ -178,7 +178,7 @@ async function createDeposit({ provider, amount, phone }) {
   return requestGateway('POST', '/api/v1/payments/deposits', body);
 }
 
-async function createWithdrawal({ provider, amount, phone, user }) {
+async function createWithdrawal({ provider, amount, phone, user, nationalId }) {
   const config = providerToGatewayConfig(provider);
   const body = {
     amount,
@@ -208,9 +208,13 @@ async function createWithdrawal({ provider, amount, phone, user }) {
   }
 
   if (provider === 'OneMoney') {
+    const idNumber = nationalId || user.nationalId;
+    if (!idNumber) {
+      throw new Error('OneMoney withdrawal requires the recipient national ID.');
+    }
     body.recipientFirstName = user.firstName;
     body.recipientLastName = user.surname;
-    body.recipientIdNumber = user.nationalId;
+    body.recipientIdNumber = idNumber;
   }
 
   return requestGateway('POST', '/api/v1/payments/withdrawals', body);
