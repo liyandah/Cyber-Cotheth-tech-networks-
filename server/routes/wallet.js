@@ -161,7 +161,7 @@ router.post('/deposit', requireAuth, async (req, res) => {
   try {
     if (!assertLivePaymentsEnabled(res)) return;
 
-    const { errors, data } = validateWalletTransaction(req.body);
+    const { errors, data } = validateWalletTransaction(req.body, 'deposit');
     if (errors.length) {
       logFailedTransaction(req.session.userId, 'deposit', req.body);
       return res.status(400).json({ success: false, errors });
@@ -222,7 +222,7 @@ router.post('/withdraw', requireAuth, async (req, res) => {
   try {
     if (!assertLivePaymentsEnabled(res)) return;
 
-    const { errors, data } = validateWalletTransaction(req.body);
+    const { errors, data } = validateWalletTransaction(req.body, 'withdrawal');
     if (errors.length) {
       logFailedTransaction(req.session.userId, 'withdrawal', req.body);
       return res.status(400).json({ success: false, errors });
